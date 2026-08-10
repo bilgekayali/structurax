@@ -1,0 +1,174 @@
+{
+  "schema_version": "0.1.0",
+  "pack_id": "clean-pack",
+  "project_id": "DEMO-PROJECT-ALPHA",
+  "generated_at": "2026-08-05T00:00:00Z",
+  "synthetic_data": true,
+  "documents": [
+    {
+      "document_id": "Q-100",
+      "document_type": "quote",
+      "external_reference": "SUP-QUOTE-100",
+      "issued_at": "2026-07-01",
+      "supplier_id": "SUPPLIER-DEMO-01",
+      "buyer_id": "BUYER-DEMO-01",
+      "currency": "EUR",
+      "line_items": [
+        {
+          "item_code": "CEM-001",
+          "description": "Synthetic cement units",
+          "quantity": 1000,
+          "unit_price": 8,
+          "line_total": 8000
+        },
+        {
+          "item_code": "REB-016",
+          "description": "Synthetic reinforcement units",
+          "quantity": 200,
+          "unit_price": 30,
+          "line_total": 6000
+        }
+      ],
+      "subtotal": 14000,
+      "tax_rate_percent": 20,
+      "tax_amount": 2800,
+      "total": 16800,
+      "bank_account": "DEMO-TR-STRUCTURAX-001",
+      "related_document_ids": [],
+      "approvals": [],
+      "extracted_text": "Synthetic supplier quote for Project Alpha.",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "document_id": "PO-100",
+      "document_type": "purchase_order",
+      "external_reference": "BUYER-PO-100",
+      "issued_at": "2026-07-03",
+      "supplier_id": "SUPPLIER-DEMO-01",
+      "buyer_id": "BUYER-DEMO-01",
+      "currency": "EUR",
+      "line_items": [
+        {
+          "item_code": "CEM-001",
+          "description": "Synthetic cement units",
+          "quantity": 1000,
+          "unit_price": 8,
+          "line_total": 8000
+        },
+        {
+          "item_code": "REB-016",
+          "description": "Synthetic reinforcement units",
+          "quantity": 200,
+          "unit_price": 30,
+          "line_total": 6000
+        }
+      ],
+      "subtotal": 14000,
+      "tax_rate_percent": 20,
+      "tax_amount": 2800,
+      "total": 16800,
+      "bank_account": "DEMO-TR-STRUCTURAX-001",
+      "related_document_ids": [
+        "Q-100"
+      ],
+      "approvals": [
+        {
+          "role": "project_manager",
+          "status": "approved",
+          "recorded_at": "2026-07-03T09:00:00Z"
+        },
+        {
+          "role": "finance",
+          "status": "approved",
+          "recorded_at": "2026-07-03T09:30:00Z"
+        }
+      ],
+      "extracted_text": "Synthetic approved purchase order.",
+      "source_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "document_id": "DN-100",
+      "document_type": "delivery_note",
+      "external_reference": "SUP-DN-100",
+      "issued_at": "2026-07-10",
+      "supplier_id": "SUPPLIER-DEMO-01",
+      "buyer_id": "BUYER-DEMO-01",
+      "currency": "EUR",
+      "line_items": [
+        {
+          "item_code": "CEM-001",
+          "description": "Synthetic cement units",
+          "quantity": 1000,
+          "unit_price": 8,
+          "line_total": 8000
+        },
+        {
+          "item_code": "REB-016",
+          "description": "Synthetic reinforcement units",
+          "quantity": 200,
+          "unit_price": 30,
+          "line_total": 6000
+        }
+      ],
+      "subtotal": 14000,
+      "tax_rate_percent": 20,
+      "tax_amount": 2800,
+      "total": 16800,
+      "bank_account": "DEMO-TR-STRUCTURAX-001",
+      "related_document_ids": [
+        "PO-100"
+      ],
+      "approvals": [],
+      "extracted_text": "Synthetic delivery note signed at the demo site.",
+      "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    {
+      "document_id": "INV-100",
+      "document_type": "invoice",
+      "external_reference": "SUP-INV-100",
+      "issued_at": "2026-07-11",
+      "supplier_id": "SUPPLIER-DEMO-01",
+      "buyer_id": "BUYER-DEMO-01",
+      "currency": "EUR",
+      "line_items": [
+        {
+          "item_code": "CEM-001",
+          "description": "Synthetic cement units",
+          "quantity": 1000,
+          "unit_price": 8,
+          "line_total": 8000
+        },
+        {
+          "item_code": "REB-016",
+          "description": "Synthetic reinforcement units",
+          "quantity": 200,
+          "unit_price": 30,
+          "line_total": 6000
+        }
+      ],
+      "subtotal": 14000,
+      "tax_rate_percent": 20,
+      "tax_amount": 2800,
+      "total": 16800,
+      "bank_account": "DEMO-TR-STRUCTURAX-001",
+      "related_document_ids": [
+        "PO-100",
+        "DN-100"
+      ],
+      "approvals": [
+        {
+          "role": "project_manager",
+          "status": "approved",
+          "recorded_at": "2026-07-11T10:00:00Z"
+        },
+        {
+          "role": "finance",
+          "status": "approved",
+          "recorded_at": "2026-07-11T10:15:00Z"
+        }
+      ],
+      "extracted_text": "Synthetic invoice matching the purchase order and delivery.",
+      "source_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ]
+}

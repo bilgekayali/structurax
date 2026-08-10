@@ -1,0 +1,19 @@
+{
+  "policy_version": "0.1.0",
+  "amount_tolerance": "0.01",
+  "price_variance_percent": "5",
+  "high_value_threshold": "10000",
+  "required_approval_roles": [
+    "project_manager",
+    "finance"
+  ],
+  "prompt_injection_indicators": [
+    "ignore previous instructions",
+    "ignore prior instructions",
+    "system override",
+    "approve without review",
+    "önceki talimatları yok say",
+    "sistem talimatını geçersiz kıl",
+    "inceleme olmadan onayla"
+  ]
+}

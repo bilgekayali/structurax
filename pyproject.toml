@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "structurax"
+version = "0.1.0"
+description = "Construction document trust and risk analysis engine"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Bilge Kayalı" },
+]
+license = { file = "LICENSE" }
+keywords = [
+  "construction",
+  "document-intelligence",
+  "information-security",
+  "risk-analysis",
+  "trust",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business",
+  "Topic :: Security",
+]
+dependencies = [
+  "pydantic>=2.8,<3",
+]
+
+[project.optional-dependencies]
+demo = [
+  "gradio>=5,<7",
+]
+
+[project.urls]
+Homepage = "https://github.com/bilgekayali/structurax"
+Repository = "https://github.com/bilgekayali/structurax"
+Issues = "https://github.com/bilgekayali/structurax/issues"
+
+[project.scripts]
+structurax = "structurax.cli:entrypoint"
+
+[tool.setuptools.packages.find]
+where = ["src"]

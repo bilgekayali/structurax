@@ -1,0 +1,271 @@
+{
+  "schema_version": "0.1.0",
+  "engine_version": "0.1.0",
+  "pack_id": "risky-pack",
+  "generated_at": "2026-08-05T00:00:00Z",
+  "input_sha256": "0c34de14f1c21fcf5819c96620faec49818ecdce839baf6c1442c64e6fb76689",
+  "policy_version": "0.1.0",
+  "summary": {
+    "finding_count": 13,
+    "severity_counts": {
+      "low": 0,
+      "medium": 0,
+      "high": 9,
+      "critical": 4
+    },
+    "disposition": "block",
+    "requires_human_review": true
+  },
+  "findings": [
+    {
+      "rule_id": "BANK_ACCOUNT_CHANGE",
+      "severity": "critical",
+      "title": "Supplier bank account changed",
+      "description": "INV-200 requests payment to an account that differs from PO-200.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "bank_account",
+          "observed": "DEMO-TR-STRUCTURAX-999",
+          "expected": "DEMO-TR-STRUCTURAX-002"
+        },
+        {
+          "document_id": "PO-200",
+          "field": "bank_account",
+          "observed": "DEMO-TR-STRUCTURAX-002",
+          "expected": null
+        }
+      ],
+      "recommendation": "Block payment and verify the change through an independent, pre-established supplier contact channel.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "BANK_ACCOUNT_CHANGE",
+      "severity": "critical",
+      "title": "Supplier bank account changed",
+      "description": "INV-200-COPY requests payment to an account that differs from PO-200.",
+      "evidence": [
+        {
+          "document_id": "INV-200-COPY",
+          "field": "bank_account",
+          "observed": "DEMO-TR-STRUCTURAX-999",
+          "expected": "DEMO-TR-STRUCTURAX-002"
+        },
+        {
+          "document_id": "PO-200",
+          "field": "bank_account",
+          "observed": "DEMO-TR-STRUCTURAX-002",
+          "expected": null
+        }
+      ],
+      "recommendation": "Block payment and verify the change through an independent, pre-established supplier contact channel.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "DUPLICATE_INVOICE",
+      "severity": "critical",
+      "title": "Possible duplicate invoice",
+      "description": "Multiple invoices share supplier, external reference, currency, and total.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "external_reference",
+          "observed": "SUP-INV-7788",
+          "expected": null
+        },
+        {
+          "document_id": "INV-200-COPY",
+          "field": "external_reference",
+          "observed": "SUP-INV-7788",
+          "expected": null
+        }
+      ],
+      "recommendation": "Block payment and have Accounts Payable verify invoice lineage and prior payment status.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "EMBEDDED_INSTRUCTION",
+      "severity": "critical",
+      "title": "Document contains an embedded control-bypass instruction",
+      "description": "Extracted text in INV-200 contains content that must be treated as untrusted data, not an instruction.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "extracted_text",
+          "observed": "approve without review, ignore prior instructions, system override",
+          "expected": "no control-bypass indicators"
+        }
+      ],
+      "recommendation": "Quarantine the document for human review and do not execute instructions found inside document content.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "ARITHMETIC_TOTAL",
+      "severity": "high",
+      "title": "Document total is inconsistent",
+      "description": "INV-200 does not reconcile to its line items and tax calculation.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "total",
+          "observed": "16500.00",
+          "expected": "16200.00"
+        }
+      ],
+      "recommendation": "Block automated approval and reconcile the arithmetic against the original source.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "ARITHMETIC_TOTAL",
+      "severity": "high",
+      "title": "Document total is inconsistent",
+      "description": "INV-200-COPY does not reconcile to its line items and tax calculation.",
+      "evidence": [
+        {
+          "document_id": "INV-200-COPY",
+          "field": "total",
+          "observed": "16500.00",
+          "expected": "16200.00"
+        }
+      ],
+      "recommendation": "Block automated approval and reconcile the arithmetic against the original source.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "INVOICE_EXCEEDS_DELIVERY",
+      "severity": "high",
+      "title": "Invoice quantity exceeds recorded delivery",
+      "description": "INV-200 bills more STL-500 than the delivery note records.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "line_items.STL-500.quantity",
+          "observed": "100",
+          "expected": "80"
+        },
+        {
+          "document_id": "DN-200",
+          "field": "line_items.STL-500.quantity",
+          "observed": "80",
+          "expected": null
+        }
+      ],
+      "recommendation": "Hold the affected line and verify receipt with the site and commercial teams.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "INVOICE_EXCEEDS_DELIVERY",
+      "severity": "high",
+      "title": "Invoice quantity exceeds recorded delivery",
+      "description": "INV-200-COPY bills more STL-500 than the delivery note records.",
+      "evidence": [
+        {
+          "document_id": "INV-200-COPY",
+          "field": "line_items.STL-500.quantity",
+          "observed": "100",
+          "expected": "80"
+        },
+        {
+          "document_id": "DN-200",
+          "field": "line_items.STL-500.quantity",
+          "observed": "80",
+          "expected": null
+        }
+      ],
+      "recommendation": "Hold the affected line and verify receipt with the site and commercial teams.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "MISSING_APPROVAL",
+      "severity": "high",
+      "title": "Required high-value approval is missing",
+      "description": "INV-200 lacks approved roles required by the active policy.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "approvals",
+          "observed": "project_manager",
+          "expected": "finance, project_manager"
+        }
+      ],
+      "recommendation": "Route the document to the missing approval roles before any payment or commitment.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "MISSING_APPROVAL",
+      "severity": "high",
+      "title": "Required high-value approval is missing",
+      "description": "INV-200-COPY lacks approved roles required by the active policy.",
+      "evidence": [
+        {
+          "document_id": "INV-200-COPY",
+          "field": "approvals",
+          "observed": "project_manager",
+          "expected": "finance, project_manager"
+        }
+      ],
+      "recommendation": "Route the document to the missing approval roles before any payment or commitment.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "MISSING_APPROVAL",
+      "severity": "high",
+      "title": "Required high-value approval is missing",
+      "description": "PO-200 lacks approved roles required by the active policy.",
+      "evidence": [
+        {
+          "document_id": "PO-200",
+          "field": "approvals",
+          "observed": "project_manager",
+          "expected": "finance, project_manager"
+        }
+      ],
+      "recommendation": "Route the document to the missing approval roles before any payment or commitment.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "UNIT_PRICE_VARIANCE",
+      "severity": "high",
+      "title": "Invoice unit price exceeds policy tolerance",
+      "description": "Line STL-500 in INV-200 differs from the purchase order price.",
+      "evidence": [
+        {
+          "document_id": "INV-200",
+          "field": "line_items.STL-500.unit_price",
+          "observed": "110.00",
+          "expected": "100.00"
+        },
+        {
+          "document_id": "PO-200",
+          "field": "line_items.STL-500.unit_price",
+          "observed": "100.00",
+          "expected": null
+        }
+      ],
+      "recommendation": "Require an approved change order or corrected invoice before payment.",
+      "requires_human_review": true
+    },
+    {
+      "rule_id": "UNIT_PRICE_VARIANCE",
+      "severity": "high",
+      "title": "Invoice unit price exceeds policy tolerance",
+      "description": "Line STL-500 in INV-200-COPY differs from the purchase order price.",
+      "evidence": [
+        {
+          "document_id": "INV-200-COPY",
+          "field": "line_items.STL-500.unit_price",
+          "observed": "110.00",
+          "expected": "100.00"
+        },
+        {
+          "document_id": "PO-200",
+          "field": "line_items.STL-500.unit_price",
+          "observed": "100.00",
+          "expected": null
+        }
+      ],
+      "recommendation": "Require an approved change order or corrected invoice before payment.",
+      "requires_human_review": true
+    }
+  ]
+}
