@@ -1,0 +1,323 @@
+{
+  "$defs": {
+    "Approval": {
+      "additionalProperties": false,
+      "properties": {
+        "recorded_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recorded At"
+        },
+        "role": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/ApprovalStatus"
+        }
+      },
+      "required": [
+        "role",
+        "status"
+      ],
+      "title": "Approval",
+      "type": "object"
+    },
+    "ApprovalStatus": {
+      "enum": [
+        "approved",
+        "pending",
+        "rejected"
+      ],
+      "title": "ApprovalStatus",
+      "type": "string"
+    },
+    "Document": {
+      "additionalProperties": false,
+      "properties": {
+        "approvals": {
+          "items": {
+            "$ref": "#/$defs/Approval"
+          },
+          "title": "Approvals",
+          "type": "array"
+        },
+        "bank_account": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bank Account"
+        },
+        "buyer_id": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "document_id": {
+          "pattern": "^[A-Z0-9][A-Z0-9._-]{2,79}$",
+          "title": "Document Id",
+          "type": "string"
+        },
+        "document_type": {
+          "$ref": "#/$defs/DocumentType"
+        },
+        "external_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "External Reference",
+          "type": "string"
+        },
+        "extracted_text": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Extracted Text",
+          "type": "string"
+        },
+        "issued_at": {
+          "format": "date",
+          "title": "Issued At",
+          "type": "string"
+        },
+        "line_items": {
+          "items": {
+            "$ref": "#/$defs/LineItem"
+          },
+          "minItems": 1,
+          "title": "Line Items",
+          "type": "array"
+        },
+        "related_document_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Document Ids",
+          "type": "array"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "subtotal": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Subtotal"
+        },
+        "supplier_id": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "tax_amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Tax Amount"
+        },
+        "tax_rate_percent": {
+          "anyOf": [
+            {
+              "maximum": 100.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Tax Rate Percent"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Total"
+        }
+      },
+      "required": [
+        "document_id",
+        "document_type",
+        "external_reference",
+        "issued_at",
+        "supplier_id",
+        "buyer_id",
+        "currency",
+        "line_items",
+        "subtotal",
+        "tax_rate_percent",
+        "tax_amount",
+        "total",
+        "source_sha256"
+      ],
+      "title": "Document",
+      "type": "object"
+    },
+    "DocumentType": {
+      "enum": [
+        "quote",
+        "purchase_order",
+        "delivery_note",
+        "invoice"
+      ],
+      "title": "DocumentType",
+      "type": "string"
+    },
+    "LineItem": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "item_code": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Item Code",
+          "type": "string"
+        },
+        "line_total": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Line Total"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Quantity"
+        },
+        "unit_price": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            }
+          ],
+          "title": "Unit Price"
+        }
+      },
+      "required": [
+        "item_code",
+        "description",
+        "quantity",
+        "unit_price",
+        "line_total"
+      ],
+      "title": "LineItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/Document"
+      },
+      "minItems": 1,
+      "title": "Documents",
+      "type": "array"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "pack_id": {
+      "pattern": "^[a-z0-9][a-z0-9-]{2,79}$",
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "project_id": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Project Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "0.1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "synthetic_data": {
+      "title": "Synthetic Data",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "pack_id",
+    "project_id",
+    "generated_at",
+    "synthetic_data",
+    "documents"
+  ],
+  "title": "DocumentPack",
+  "type": "object"
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "engine_version": "0.1.0",
+  "pack_id": "clean-pack",
+  "generated_at": "2026-08-05T00:00:00Z",
+  "input_sha256": "b240bb3952e874d49703ede20990684a5426aeb22685aa951ef922ecc9b0e740",
+  "policy_version": "0.1.0",
+  "summary": {
+    "finding_count": 0,
+    "severity_counts": {
+      "low": 0,
+      "medium": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "disposition": "allow",
+    "requires_human_review": false
+  },
+  "findings": []
+}
