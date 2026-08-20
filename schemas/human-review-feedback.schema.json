@@ -36,6 +36,7 @@
       "title": "Notes"
     },
     "operational_side_effects_performed": {
+      "const": false,
       "default": false,
       "title": "Operational Side Effects Performed",
       "type": "boolean"
@@ -60,6 +61,7 @@
       "type": "string"
     },
     "schema_version": {
+      "const": "0.2.0",
       "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"

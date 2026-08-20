@@ -49,11 +49,13 @@
           "type": "string"
         },
         "schema_version": {
+          "const": "0.2.0",
           "default": "0.2.0",
           "title": "Schema Version",
           "type": "string"
         },
         "source_media_type": {
+          "const": "application/pdf",
           "default": "application/pdf",
           "title": "Source Media Type",
           "type": "string"
@@ -85,6 +87,7 @@
   "additionalProperties": false,
   "properties": {
     "external_execution_performed": {
+      "const": false,
       "default": false,
       "title": "External Execution Performed",
       "type": "boolean"
@@ -102,11 +105,13 @@
       "$ref": "#/$defs/IngestionProvenance"
     },
     "requires_human_review": {
+      "const": true,
       "default": true,
       "title": "Requires Human Review",
       "type": "boolean"
     },
     "schema_version": {
+      "const": "0.2.0",
       "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"

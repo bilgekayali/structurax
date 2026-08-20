@@ -6,6 +6,7 @@ import hashlib
 import json
 from datetime import datetime
 from enum import Enum
+from typing import Literal
 
 from pydantic import Field, model_validator
 
@@ -19,7 +20,7 @@ class ReviewOutcome(str, Enum):
 
 
 class HumanReviewFeedback(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     case_id: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{2,79}$")
     finding_rule_id: str = Field(pattern=r"^[A-Z][A-Z0-9_]{2,79}$")
     source_report_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
@@ -28,7 +29,7 @@ class HumanReviewFeedback(StrictModel):
     rationale_code: str = Field(pattern=r"^[A-Z][A-Z0-9_]{2,79}$")
     notes: str | None = Field(default=None, max_length=500)
     recorded_at: datetime
-    operational_side_effects_performed: bool = False
+    operational_side_effects_performed: Literal[False] = False
 
     @model_validator(mode="after")
     def reject_side_effect_claims(self) -> "HumanReviewFeedback":

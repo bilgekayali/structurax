@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from typing import Literal, Protocol, runtime_checkable
 
 from pydantic import Field, model_validator
 
@@ -49,10 +49,10 @@ def _canonical_digest(payload: object) -> str:
 
 
 class SandboxProfile(StrictModel):
-    network_access: bool = False
-    subprocess_access: bool = False
-    filesystem_write_access: bool = False
-    external_model_access: bool = False
+    network_access: Literal[False] = False
+    subprocess_access: Literal[False] = False
+    filesystem_write_access: Literal[False] = False
+    external_model_access: Literal[False] = False
 
     @model_validator(mode="after")
     def require_closed_profile(self) -> "SandboxProfile":
@@ -96,10 +96,10 @@ class AdapterExtraction(StrictModel):
 
 
 class IngestionProvenance(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     source_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     source_size_bytes: int = Field(ge=1, le=MAX_SOURCE_BYTES)
-    source_media_type: str = PDF_MEDIA_TYPE
+    source_media_type: Literal["application/pdf"] = PDF_MEDIA_TYPE
     adapter_id: str
     adapter_version: str
     adapter_config_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
@@ -107,13 +107,13 @@ class IngestionProvenance(StrictModel):
 
 
 class IngestionArtifact(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     source_name: str = Field(min_length=1, max_length=200)
     pages: list[ExtractedPage] = Field(min_length=1, max_length=MAX_PAGES)
     warnings: list[str] = Field(default_factory=list, max_length=20)
     provenance: IngestionProvenance
-    external_execution_performed: bool = False
-    requires_human_review: bool = True
+    external_execution_performed: Literal[False] = False
+    requires_human_review: Literal[True] = True
 
     @model_validator(mode="after")
     def preserve_non_execution_boundary(self) -> "IngestionArtifact":
@@ -123,7 +123,7 @@ class IngestionArtifact(StrictModel):
 
 
 class RecordedExtractionCatalog(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     adapter: AdapterIdentity
     extractions: dict[str, AdapterExtraction]
 
@@ -192,8 +192,7 @@ def ingest_pdf_bytes(
     """Preflight a PDF and bind adapter output to exact source/config provenance."""
 
     inspect_pdf_bytes(source_bytes)
-    identity = adapter.identity
-    identity = AdapterIdentity.model_validate(identity.model_dump(mode="json"))
+    identity = AdapterIdentity.model_validate(adapter.identity.model_dump(mode="json"))
     extraction = adapter.extract(source_bytes, source_name)
     extraction = AdapterExtraction.model_validate(extraction.model_dump(mode="json"))
     source_digest = _sha256(source_bytes)

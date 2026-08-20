@@ -83,21 +83,25 @@
       "additionalProperties": false,
       "properties": {
         "external_model_access": {
+          "const": false,
           "default": false,
           "title": "External Model Access",
           "type": "boolean"
         },
         "filesystem_write_access": {
+          "const": false,
           "default": false,
           "title": "Filesystem Write Access",
           "type": "boolean"
         },
         "network_access": {
+          "const": false,
           "default": false,
           "title": "Network Access",
           "type": "boolean"
         },
         "subprocess_access": {
+          "const": false,
           "default": false,
           "title": "Subprocess Access",
           "type": "boolean"
@@ -120,6 +124,7 @@
       "type": "object"
     },
     "schema_version": {
+      "const": "0.2.0",
       "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"

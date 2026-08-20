@@ -4,7 +4,10 @@
       "additionalProperties": false,
       "properties": {
         "expected_outcome": {
-          "pattern": "^(accept|reject)$",
+          "enum": [
+            "accept",
+            "reject"
+          ],
           "title": "Expected Outcome",
           "type": "string"
         },
@@ -22,6 +25,10 @@
           "title": "Expected Reason"
         },
         "media_type": {
+          "enum": [
+            "application/pdf",
+            "application/json"
+          ],
           "title": "Media Type",
           "type": "string"
         },
@@ -62,6 +69,7 @@
       "type": "string"
     },
     "schema_version": {
+      "const": "0.2.0",
       "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"

@@ -6,6 +6,7 @@ import base64
 import hashlib
 import json
 from pathlib import Path
+from typing import Literal
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
@@ -17,13 +18,13 @@ from structurax.models import StrictModel
 class FixtureEntry(StrictModel):
     path: str = Field(pattern=r"^datasets/ingestion/[a-zA-Z0-9._/-]+$")
     sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
-    media_type: str
-    expected_outcome: str = Field(pattern=r"^(accept|reject)$")
+    media_type: Literal["application/pdf", "application/json"]
+    expected_outcome: Literal["accept", "reject"]
     expected_reason: str | None = Field(default=None, max_length=160)
 
 
 class FixtureManifest(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     fixture_set_id: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{2,79}$")
     entries: list[FixtureEntry] = Field(min_length=1)
 

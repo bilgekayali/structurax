@@ -12,6 +12,7 @@
   "additionalProperties": false,
   "properties": {
     "automation_authority": {
+      "const": false,
       "default": false,
       "title": "Automation Authority",
       "type": "boolean"
@@ -30,6 +31,7 @@
       "type": "string"
     },
     "schema_version": {
+      "const": "0.2.0",
       "default": "0.2.0",
       "title": "Schema Version",
       "type": "string"

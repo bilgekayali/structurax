@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import Field, model_validator
 
 from structurax.models import StrictModel
@@ -60,7 +62,7 @@ class RuleFamilyMetric(StrictModel):
 
 
 class RuleEvaluationReport(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     case_count: int = Field(ge=1)
     metrics: list[RuleFamilyMetric]
     macro_precision: float | None = Field(default=None, ge=0, le=1)
@@ -94,12 +96,8 @@ def evaluate_rule_families(
     counters = {family: [0, 0, 0] for family in RULE_FAMILIES}
     for case_id, expected_case in expected_by_id.items():
         observed_case = observed_by_id[case_id]
-        expected_families = {
-            RULE_FAMILY_BY_ID[rule_id] for rule_id in expected_case.expected_rule_ids
-        }
-        observed_families = {
-            RULE_FAMILY_BY_ID[rule_id] for rule_id in observed_case.observed_rule_ids
-        }
+        expected_families = {RULE_FAMILY_BY_ID[rule_id] for rule_id in expected_case.expected_rule_ids}
+        observed_families = {RULE_FAMILY_BY_ID[rule_id] for rule_id in observed_case.observed_rule_ids}
         for family in RULE_FAMILIES:
             expected = family in expected_families
             observed = family in observed_families

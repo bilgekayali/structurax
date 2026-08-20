@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import Literal
 
 from pydantic import Field
 
@@ -15,12 +16,12 @@ class ExplanationLanguage(str, Enum):
 
 
 class ReviewerExplanation(StrictModel):
-    schema_version: str = "0.2.0"
+    schema_version: Literal["0.2.0"] = "0.2.0"
     rule_id: str
     language: ExplanationLanguage
     summary: str = Field(min_length=1, max_length=500)
     review_action: str = Field(min_length=1, max_length=500)
-    automation_authority: bool = False
+    automation_authority: Literal[False] = False
 
 
 _TEXT: dict[str, dict[ExplanationLanguage, tuple[str, str]]] = {

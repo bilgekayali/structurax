@@ -10,10 +10,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from structurax.evaluation import ObservedRuleCase, RuleEvaluationCase, evaluate_rule_families
-from structurax.explanations import reviewer_explanation, supported_explanation_rule_ids
+from structurax.explanations import ReviewerExplanation, reviewer_explanation, supported_explanation_rule_ids
 from structurax.feedback import HumanReviewFeedback, ReviewOutcome, feedback_digest
 from structurax.fixture_signing import verify_fixture_manifest
-from structurax.ingestion import RecordedExtractionAdapter, ingest_pdf_path, inspect_pdf_bytes
+from structurax.ingestion import RecordedExtractionAdapter, SandboxProfile, ingest_pdf_path, inspect_pdf_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 INGESTION = ROOT / "datasets" / "ingestion"
@@ -104,6 +104,40 @@ class V02IntegrationTests(unittest.TestCase):
         for rule_id in supported_explanation_rule_ids():
             self.assertTrue(reviewer_explanation(rule_id, "en").review_action)
             self.assertTrue(reviewer_explanation(rule_id, "tr").review_action)
+
+    def test_machine_contracts_reject_authority_and_side_effect_claims(self) -> None:
+        with self.assertRaises(Exception):
+            SandboxProfile(network_access=True)
+        with self.assertRaises(Exception):
+            ReviewerExplanation(
+                rule_id="BANK_ACCOUNT_CHANGE",
+                language="en",
+                summary="review",
+                review_action="review",
+                automation_authority=True,
+            )
+        with self.assertRaises(Exception):
+            HumanReviewFeedback(
+                case_id="risky-pack",
+                finding_rule_id="BANK_ACCOUNT_CHANGE",
+                source_report_sha256="a" * 64,
+                outcome=ReviewOutcome.CONFIRMED,
+                reviewer_role="finance_reviewer",
+                rationale_code="SOURCE_VERIFIED",
+                recorded_at=datetime(2026, 8, 20, tzinfo=UTC),
+                operational_side_effects_performed=True,
+            )
+
+    def test_machine_contract_schemas_encode_fail_closed_consts(self) -> None:
+        sandbox_schema = SandboxProfile.model_json_schema()["properties"]
+        self.assertIs(sandbox_schema["network_access"]["const"], False)
+        self.assertIs(sandbox_schema["external_model_access"]["const"], False)
+        explanation_schema = ReviewerExplanation.model_json_schema()["properties"]
+        self.assertIs(explanation_schema["automation_authority"]["const"], False)
+        self.assertEqual(explanation_schema["schema_version"]["const"], "0.2.0")
+        feedback_schema = HumanReviewFeedback.model_json_schema()["properties"]
+        self.assertIs(feedback_schema["operational_side_effects_performed"]["const"], False)
+        self.assertEqual(feedback_schema["schema_version"]["const"], "0.2.0")
 
 
 if __name__ == "__main__":
