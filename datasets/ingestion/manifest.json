@@ -1,0 +1,41 @@
+{
+  "entries": [
+    {
+      "expected_outcome": "reject",
+      "expected_reason": "unsupported active-content marker",
+      "media_type": "application/pdf",
+      "path": "datasets/ingestion/active-content.pdf",
+      "sha256": "b7a59c8e86b899dae2ce75d8d3d1fcf59748f7bde68211a0be64f8032f0d48c0"
+    },
+    {
+      "expected_outcome": "accept",
+      "expected_reason": null,
+      "media_type": "application/pdf",
+      "path": "datasets/ingestion/clean-invoice.pdf",
+      "sha256": "61c21f1c91245070c27c49747399df032898498498748c8433672c5aaa535a5e"
+    },
+    {
+      "expected_outcome": "accept",
+      "expected_reason": null,
+      "media_type": "application/pdf",
+      "path": "datasets/ingestion/embedded-instruction.pdf",
+      "sha256": "c83b32aafe49caaef3ee6c6e5ced1f81d89d0cc79d010608c6270ea6df78fbb4"
+    },
+    {
+      "expected_outcome": "accept",
+      "expected_reason": "recorded network-free extraction catalog",
+      "media_type": "application/json",
+      "path": "datasets/ingestion/recorded_extractions.json",
+      "sha256": "30f46889d635165a62afefbe3935993161ba52fee7e8b1d504075b0c52e2a704"
+    },
+    {
+      "expected_outcome": "reject",
+      "expected_reason": "missing terminal %%EOF marker",
+      "media_type": "application/pdf",
+      "path": "datasets/ingestion/truncated.pdf",
+      "sha256": "470127f344c58d3b59ef06f5e3e3b4e95691b99809b6e6de1b50eb8707f65977"
+    }
+  ],
+  "fixture_set_id": "structurax-v0.2-ingestion",
+  "schema_version": "0.2.0"
+}

@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "ExtractedPage": {
+      "additionalProperties": false,
+      "properties": {
+        "ocr_used": {
+          "default": false,
+          "title": "Ocr Used",
+          "type": "boolean"
+        },
+        "page_number": {
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text": {
+          "maxLength": 10000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "page_number",
+        "text"
+      ],
+      "title": "ExtractedPage",
+      "type": "object"
+    },
+    "IngestionProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_config_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Adapter Config Sha256",
+          "type": "string"
+        },
+        "adapter_id": {
+          "title": "Adapter Id",
+          "type": "string"
+        },
+        "adapter_version": {
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "extraction_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Extraction Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "default": "0.2.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_media_type": {
+          "default": "application/pdf",
+          "title": "Source Media Type",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_size_bytes": {
+          "maximum": 5242880,
+          "minimum": 1,
+          "title": "Source Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source_sha256",
+        "source_size_bytes",
+        "adapter_id",
+        "adapter_version",
+        "adapter_config_sha256",
+        "extraction_sha256"
+      ],
+      "title": "IngestionProvenance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "external_execution_performed": {
+      "default": false,
+      "title": "External Execution Performed",
+      "type": "boolean"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/ExtractedPage"
+      },
+      "maxItems": 200,
+      "minItems": 1,
+      "title": "Pages",
+      "type": "array"
+    },
+    "provenance": {
+      "$ref": "#/$defs/IngestionProvenance"
+    },
+    "requires_human_review": {
+      "default": true,
+      "title": "Requires Human Review",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "default": "0.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_name": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Source Name",
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "source_name",
+    "pages",
+    "provenance"
+  ],
+  "title": "IngestionArtifact",
+  "type": "object"
+}

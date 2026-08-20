@@ -2,6 +2,25 @@
 
 All notable changes to StructuraX are documented here.
 
+## [0.2.0] - 2026-08-20
+
+### Added
+
+- Fail-closed PDF preflight and a closed ingestion-adapter contract with exact source,
+  adapter and extraction provenance.
+- Network-free, digest-bound recorded extraction adapter for synthetic PDF fixtures.
+- Adversarial/truncated PDF boundary fixtures protected by an Ed25519-signed manifest.
+- Deterministic English and Turkish reviewer explanations for all current rule IDs.
+- Rule-family false-positive/false-negative, precision and recall regression evidence.
+- Side-effect-free human-review feedback contract and stable feedback digest.
+- Six v0.2 JSON Schemas, fixture data-lineage documentation and expanded CI across Python
+  3.11, 3.12 and 3.13.
+
+### Security boundary
+
+- v0.2 does not perform live OCR/model calls and does not claim kernel/container sandbox
+  enforcement. Real parser/OCR workers remain a future separately isolated boundary.
+
 ## [0.1.0] - 2026-08-05
 
 ### Added
@@ -13,4 +32,3 @@ All notable changes to StructuraX are documented here.
 - Clean and deliberately risky synthetic reference scenarios.
 - Credential-free Gradio and Docker demo paths.
 - Generated JSON Schema, reference reports, unit tests, CI, architecture notes, and threat model.
-

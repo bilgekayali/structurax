@@ -12,20 +12,26 @@ permissions:
 
 jobs:
   deterministic-validation:
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
           cache: pip
 
       - name: Install package
         run: python -m pip install -e .
+
+      - name: Compile source
+        run: python -m compileall -q src/structurax
 
       - name: Run tests
         run: python -m unittest discover -s tests -v
@@ -35,11 +41,29 @@ jobs:
           structurax validate --pack datasets/demo/clean_pack.json
           structurax validate --pack datasets/demo/risky_pack.json
 
+      - name: Verify signed v0.2 fixture set
+        run: |
+          structurax verify-fixtures \
+            --root . \
+            --manifest datasets/ingestion/manifest.json \
+            --signature datasets/ingestion/manifest.sig \
+            --public-key datasets/ingestion/manifest.pub
+
+      - name: Exercise network-free recorded ingestion
+        run: |
+          structurax ingest \
+            --source datasets/ingestion/clean-invoice.pdf \
+            --recordings datasets/ingestion/recorded_extractions.json \
+            --output /tmp/structurax-ingestion.json
+          grep -q '"external_execution_performed": false' /tmp/structurax-ingestion.json
+
       - name: Regenerate deterministic artifacts
         run: |
           python scripts/generate_schema.py
           python scripts/build_demo_reports.py
+          python scripts/evaluate_rule_cases.py
 
       - name: Verify committed artifacts
-        run: git diff --exit-code -- schemas reports/demo
-
+        run: |
+          git diff --exit-code -- schemas reports/demo reports/evaluation
+          test -z "$(git status --porcelain -- schemas reports/demo reports/evaluation)"

@@ -1,0 +1,26 @@
+{
+  "cases": [
+    {
+      "case_id": "clean-pack",
+      "expected_rule_ids": [],
+      "pack_path": "datasets/demo/clean_pack.json"
+    },
+    {
+      "case_id": "risky-pack",
+      "expected_rule_ids": [
+        "ARITHMETIC_TOTAL",
+        "BANK_ACCOUNT_CHANGE",
+        "DUPLICATE_INVOICE",
+        "EMBEDDED_INSTRUCTION",
+        "INVOICE_EXCEEDS_DELIVERY",
+        "MISSING_APPROVAL",
+        "UNIT_PRICE_VARIANCE"
+      ],
+      "pack_path": "datasets/demo/risky_pack.json"
+    }
+  ],
+  "limitations": [
+    "Synthetic regression labels only; not a production accuracy benchmark."
+  ],
+  "schema_version": "0.2.0"
+}
