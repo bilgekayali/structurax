@@ -22,10 +22,6 @@ The roadmap keeps deterministic controls and human authority ahead of model capa
 - [x] Human-review feedback format without production side effects.
 - [x] Ed25519-signed fixture manifest and documented data lineage.
 
-The built-in v0.2 adapter is a deterministic replay boundary; it does **not** perform live
-OCR or claim OS/container sandbox enforcement. A future real parser/OCR worker must be
-separately isolated and satisfy the same closed adapter contract.
-
 ## v0.3 — Optional AI adapters
 
 - [x] Provider-neutral extraction adapter contract.
@@ -35,17 +31,20 @@ separately isolated and satisfy the same closed adapter contract.
 - [x] Confidence abstention and deterministic fallback behavior.
 - [x] Network and tool access disabled by default in the accepted core adapter profile.
 
-The built-in v0.3 implementation remains offline and synthetic. It defines the contract a
-future separately operated provider integration must satisfy; it does not ship credentials,
-live model calls, network permission, or autonomous action authority.
-
 ## v0.4 — Controlled pilot readiness
 
-- [ ] Role-based review workflow and immutable audit events.
-- [ ] Policy versioning, approval ownership, and change governance.
-- [ ] Privacy, retention, access-control, and incident-response design.
-- [ ] Red-team exercise and independent security review.
-- [ ] Deployment guide with explicit human checkpoints and rollback.
+- [x] Role-based review workflow and hash-linked immutable audit-event contract.
+- [x] Maker-checker separation, approval ownership, and default-deny role enforcement.
+- [x] Policy versioning, exact predecessor binding, approval ownership, and change governance.
+- [x] Privacy, retention, access-control, incident-response, and rollback reference contracts.
+- [x] Synthetic red-team exercise covering workflow and release-readiness bypass attempts.
+- [x] Deployment reference with explicit human checkpoints and no autonomous action authority.
+- [x] Exact repository-review digest utility and independent-review machine contract.
+- [ ] Genuine independent security review of the exact v0.4 source state.
+
+The implementation milestone may merge without fabricating independent review evidence. A
+pilot-ready claim remains fail-closed until a genuine independent reviewer supplies a
+schema-valid review bound to the exact repository digest and all gates are re-run.
 
 ## v0.5 — Construction intelligence
 
@@ -63,5 +62,6 @@ live model calls, network permission, or autonomous action authority.
 - [ ] Genuine independent security review before formal stable release.
 
 The roadmap is directional, not a release commitment. Production use requires a separate
-risk assessment, governance model, security architecture, and validation against the
-actual organization, document types, contracts, models, providers and jurisdiction.
+risk assessment, governance model, security architecture, legal/privacy assessment, and
+validation against the actual organization, document types, contracts, models, providers
+and jurisdiction.
