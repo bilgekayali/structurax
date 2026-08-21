@@ -33,7 +33,7 @@ The roadmap keeps deterministic controls and human authority ahead of model capa
 
 ## v0.4 — Controlled pilot readiness
 
-- [x] Role-based review workflow and hash-linked immutable audit-event contract.
+- [x] Role-based review workflow with tamper-evident hash-linked audit events and semantic policy replay.
 - [x] Maker-checker separation, approval ownership, and default-deny role enforcement.
 - [x] Policy versioning, exact predecessor binding, approval ownership, and change governance.
 - [x] Privacy, retention, access-control, incident-response, and rollback reference contracts.
@@ -41,6 +41,9 @@ The roadmap keeps deterministic controls and human authority ahead of model capa
 - [x] Deployment reference with explicit human checkpoints and no autonomous action authority.
 - [x] Exact repository-review digest utility and independent-review machine contract.
 - [ ] Genuine independent security review of the exact v0.4 source state.
+
+The hash-linked audit chain is tamper-evident evidence; it is not a claim of append-only or
+WORM storage. Production immutability requires separately enforced storage and IAM controls.
 
 The implementation milestone may merge without fabricating independent review evidence. A
 pilot-ready claim remains fail-closed until a genuine independent reviewer supplies a
