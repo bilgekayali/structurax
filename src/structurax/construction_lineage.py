@@ -51,6 +51,7 @@ def contract_authority(
         for edge in case.lineage_edges
         if edge.relation == LineageRelation.AMENDS
     }
+    as_of = case.generated_at.date()
     approved = sorted(
         [
             vo
@@ -58,6 +59,7 @@ def contract_authority(
             if vo.supplier_id == supplier_id
             and vo.item_code == item_code
             and vo.status == VariationStatus.APPROVED
+            and vo.effective_at <= as_of
             and (contract.artifact_id, vo.artifact_id) in declared_amendments
         ],
         key=lambda vo: (vo.effective_at, vo.variation_id),
