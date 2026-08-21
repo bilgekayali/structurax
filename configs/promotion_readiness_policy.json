@@ -1,0 +1,33 @@
+{
+  "policy_version": "1.0-rc2",
+  "required_release_version": "1.0.0",
+  "gate_check_domains": {
+    "stable_contracts": [
+      "stable_api_contract_frozen",
+      "stable_schema_contract_frozen"
+    ],
+    "production_controls": [
+      "postgresql_tenant_isolation_validated",
+      "external_identity_boundary_validated",
+      "evidence_encryption_and_key_management_validated",
+      "observability_and_deployment_controls_validated"
+    ],
+    "repository_governance": [
+      "main_branch_protection_verified",
+      "required_status_checks_verified",
+      "codeql_release_gate_enforced"
+    ],
+    "release_supply_chain": [
+      "complete_release_sbom_attached",
+      "build_provenance_attested"
+    ],
+    "independent_security_review": [
+      "independent_security_review_verified"
+    ]
+  },
+  "require_live_branch_summary": true,
+  "require_full_branch_protection_snapshot": true,
+  "human_promotion_required": true,
+  "automatic_gate_mutation_allowed": false,
+  "production_readiness_claimed": false
+}
