@@ -1,0 +1,59 @@
+name: Release Gates
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  v1-prep-release-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Verify draft stable API contract
+        run: python scripts/verify_stable_api.py
+
+      - name: Verify draft stable schema contract
+        run: python scripts/verify_stable_schemas.py
+
+      - name: Generate installed dependency-closure SBOM
+        run: |
+          python scripts/generate_dependency_sbom.py > /tmp/structurax-sbom.cdx.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/structurax-sbom.cdx.json').read_text())
+          assert payload['bomFormat'] == 'CycloneDX'
+          assert payload['specVersion'] == '1.5'
+          names = {item['name'] for item in payload['components']}
+          assert {'structurax', 'pydantic', 'cryptography'} <= names
+          PY
+
+      - name: Enforce fail-closed formal release gate
+        run: |
+          python scripts/assess_release_gate.py > /tmp/structurax-release-gate.json
+          grep -q '"eligible": false' /tmp/structurax-release-gate.json
+          grep -q '"independent_security_review_verified"' /tmp/structurax-release-gate.json
+          grep -q '"package_version_not_1_0_0"' /tmp/structurax-release-gate.json
+
+      - name: Run v1.0 release-gate tests
+        run: python -m unittest tests.test_v10_release_gates -v
