@@ -7,16 +7,18 @@ All notable changes to StructuraX are documented here.
 ### Added
 
 - Role-based human review workflow with maker-checker separation and explicit approval ownership.
-- Hash-linked immutable audit-event evidence bound to exact review-case and policy digests.
+- Tamper-evident, hash-linked audit-event evidence bound to exact review-case and policy digests.
+- Semantic audit-history replay that revalidates RBAC, maker-checker and approval-owner rules even when an attacker recomputes event hashes.
 - Policy versioning and change-governance contract requiring separate author/approver humans and exact predecessor binding.
 - Reference-only data handling, default-deny access, incident response, human checkpoint and rollback contracts.
-- Deterministic synthetic workflow fixtures and v0.4 red-team scenarios for audit tampering, self-approval, approval-owner bypass, policy substitution and missing independent review.
+- Deterministic synthetic workflow fixtures and v0.4 red-team scenarios for audit tampering, rehashed unauthorized history, self-approval, approval-owner bypass, policy substitution and missing independent review.
 - Fail-closed pilot-readiness assessment that cannot become eligible without a genuine independent review bound to the expected repository digest.
 - Deterministic Git-tracked repository review-digest utility and independent security review schema/handoff guidance.
 - Seven new v0.4 JSON Schemas, pilot governance/security/deployment documentation and CI coverage.
 
 ### Security boundary
 
+- The hash-linked audit chain is tamper-evident evidence, not proof of immutable/WORM storage; production immutability requires separately enforced append-only storage and IAM controls.
 - v0.4 remains reference-only: no live model/OCR call, deployment, autonomous approval, payment, ERP mutation or external notification is performed.
 - The implementation milestone does not fabricate independent review evidence. The committed pilot-readiness report remains ineligible until a real independent review exists.
 
