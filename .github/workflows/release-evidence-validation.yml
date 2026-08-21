@@ -1,0 +1,45 @@
+name: Release Evidence Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-evidence-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: python -m pip install .
+
+      - name: Build release-evidence preview
+        run: |
+          rm -rf dist
+          python -m pip wheel . --no-deps --wheel-dir dist
+          python scripts/generate_dependency_sbom.py > dist/structurax-dependency-sbom.cdx.json
+          python scripts/build_release_provenance.py > dist/structurax-source-provenance.json
+          python scripts/assess_release_gate.py > dist/structurax-release-gate.json
+          python scripts/build_release_evidence_manifest.py > dist/structurax-release-evidence-manifest.json
+
+      - name: Verify digest-bound release-evidence preview
+        run: python scripts/verify_release_evidence_manifest.py
+
+      - name: Run supply-chain evidence tests
+        run: python -m unittest tests.test_v10_release_candidate_supply_chain -v

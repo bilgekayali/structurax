@@ -1,0 +1,16 @@
+{
+  "policy_version": "1.0-rc1",
+  "bundle_format": "structurax-release-evidence/v1",
+  "required_artifact_roles": [
+    "wheel",
+    "dependency_sbom",
+    "source_provenance",
+    "release_gate"
+  ],
+  "require_single_wheel": true,
+  "require_subject_digest_binding": true,
+  "attestation_required_for_formal_release": true,
+  "independent_security_review_required": true,
+  "formal_release_evidence_complete": false,
+  "production_readiness_claimed": false
+}

@@ -9,6 +9,7 @@
     "v1-prep-release-gates",
     "security-reference-validation",
     "deployment-reference-validation",
+    "release-evidence-validation",
     "CodeQL (python)"
   ],
   "manual_controls_expected": {
