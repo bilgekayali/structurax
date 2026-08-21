@@ -1,0 +1,19 @@
+{
+  "allow_self_approval": false,
+  "approval_owner_ids": [
+    "synthetic-approver"
+  ],
+  "approved_by": "synthetic-policy-owner",
+  "authored_by": "synthetic-policy-author",
+  "change_ticket_id": "SYNTHETIC-CHG-0400",
+  "default_deny": true,
+  "effective_at": "2026-08-21T08:00:00Z",
+  "maker_checker_required": true,
+  "policy_id": "controlled-pilot-review",
+  "policy_version": "0.4.0",
+  "required_approval_roles": [
+    "approver"
+  ],
+  "schema_version": "0.4.0",
+  "supersedes_policy_sha256": null
+}
