@@ -18,21 +18,27 @@
       "fields": [
         {
           "confidence": 0.95,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "0eeb2b6cb73bcdc5f580acf1d870fec933d3812111cb51202d15a8c699d85b5b",
           "field_name": "invoice.number",
           "value": "INV-100"
         },
         {
           "confidence": 0.94,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "0eeb2b6cb73bcdc5f580acf1d870fec933d3812111cb51202d15a8c699d85b5b",
           "field_name": "invoice.total",
           "value": "1250.00"
         },
         {
           "confidence": 0.92,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "0eeb2b6cb73bcdc5f580acf1d870fec933d3812111cb51202d15a8c699d85b5b",
           "field_name": "supplier.name",
           "value": "Acme Contractors"
@@ -48,14 +54,18 @@
       "fields": [
         {
           "confidence": 0.99,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "150c534c276e898120b78492fbc85c8e18c25d4bdf593a7a2a4c78ffe2074108",
           "field_name": "invoice.number",
           "value": "INV-102"
         },
         {
           "confidence": 0.99,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "150c534c276e898120b78492fbc85c8e18c25d4bdf593a7a2a4c78ffe2074108",
           "field_name": "invoice.total",
           "value": "775.00"
@@ -71,14 +81,18 @@
       "fields": [
         {
           "confidence": 0.93,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "b205535e6c48182f3a8c74f6ac283b6e5b794afc8e93fefd7849a9845bffd14f",
           "field_name": "invoice.number",
           "value": "INV-101"
         },
         {
           "confidence": 0.91,
-          "evidence_pages": [1],
+          "evidence_pages": [
+            1
+          ],
           "evidence_text_sha256": "b205535e6c48182f3a8c74f6ac283b6e5b794afc8e93fefd7849a9845bffd14f",
           "field_name": "invoice.total",
           "value": "980.00"
