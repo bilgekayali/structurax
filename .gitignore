@@ -13,4 +13,8 @@ venv/
 .env
 .DS_Store
 reports/local-*/
+production-evidence/receipts/
+production-evidence/*.statement.json
+production-evidence/*.signing-payload
+production-evidence/*.signature
 

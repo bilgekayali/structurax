@@ -77,6 +77,13 @@ Ordinary CI deliberately contains no production evidence and cannot auto-promote
 a trusted validator key and real external evidence remain required before human-reviewed gate
 promotion.
 
+Production-evidence collection is now operationalized without production connectivity or private
+key custody in the repository. Secret-free per-control receipts bind external evidence digests to
+the exact release surface, an assembler requires the complete four-control set for one production
+environment, and the repository emits only the canonical Ed25519 signing payload. Signature creation
+remains external; the returned signature is attached and verified with a separately governed trusted
+public key before it can become release evidence.
+
 Release-candidate supply-chain preparation now binds the wheel, dependency SBOM, source
 provenance and release-gate output into a deterministic SHA-256 evidence manifest before any
 manual GitHub attestation step. This is preparation only: the SBOM/provenance milestone remains
