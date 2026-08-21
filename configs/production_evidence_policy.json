@@ -1,9 +1,9 @@
 {
-  "policy_version": "1.0-rc1",
+  "policy_version": "1.0-rc2",
   "evidence_path": "production-evidence/v1.0-controls.json",
   "schema_path": "release-evidence-schemas/production-control-evidence.schema.json",
   "signature_algorithm": "Ed25519",
-  "repository_digest_algorithm": "sha256-git-tracked-excluding-evidence",
+  "repository_digest_algorithm": "sha256-release-surface-v1",
   "required_controls": {
     "postgresql_tenant_isolation_validated": "production-postgresql-tenant-isolation",
     "external_identity_boundary_validated": "production-external-identity-boundary",

@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.0-rc2",
+  "policy_version": "1.0-rc3",
   "branch": "main",
   "require_protected": true,
   "required_status_checks": [
@@ -12,6 +12,7 @@
     "release-evidence-validation",
     "production-evidence-harness",
     "promotion-readiness",
+    "formal-promotion-transaction",
     "CodeQL (python)"
   ],
   "manual_controls_expected": {

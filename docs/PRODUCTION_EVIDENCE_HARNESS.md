@@ -11,7 +11,7 @@ The harness covers the four production-only controls that remain false in `confi
 - Evidence encryption and key management.
 - Observability and deployment controls.
 
-A production validation statement must be bound to the exact canonical repository digest and signed with an out-of-band trusted Ed25519 validator key. The committed envelope contains only opaque identifiers and SHA-256 evidence digests. Raw endpoints, credentials, secrets, connection strings, tokens, key material and production document content are forbidden.
+A production validation statement must be bound to the canonical v1.0 release-surface digest and signed with an out-of-band trusted Ed25519 validator key. The committed envelope contains only opaque identifiers and SHA-256 evidence digests. Raw endpoints, credentials, secrets, connection strings, tokens, key material and production document content are forbidden.
 
 ## Evidence shape
 
@@ -28,11 +28,11 @@ Each control must:
 
 The top-level statement must confirm that the validation occurred against a production environment while explicitly declaring that raw endpoint metadata and raw secret material are absent from the committed evidence.
 
-## Signature and repository binding
+## Signature and release-surface binding
 
-`scripts/verify_production_evidence.py` canonicalizes only the statement, verifies an Ed25519 signature using a separately supplied trusted public key and requires `reviewed_repository_sha256` to match `scripts/repository_review_digest.py`.
+`scripts/assess_promotion_readiness.py` supplies `sha256-release-surface-v1` to the production-evidence verifier. `scripts/release_surface_digest.py` hashes Git-tracked source and policy state while canonicalizing only the explicit mechanical release metadata permitted by the final promotion transaction. This lets genuine production evidence remain valid across the final version/classifier-only promotion commit without making source, schema, workflow, dependency or security-policy changes invisible.
 
-`production-evidence/v1.0-controls.json` is excluded from the canonical repository digest, just like independent-review evidence, so the signed statement can bind the code/configuration state without a circular hash dependency.
+`production-evidence/v1.0-controls.json` is excluded from the release-surface digest, just like independent-review and human release-approval evidence, so signed evidence can bind the reviewed source/configuration state without a circular hash dependency.
 
 The signature key identifier is the SHA-256 digest of the trusted raw Ed25519 public key. Merely committing a self-generated public key together with an evidence envelope is not sufficient evidence of validator trust. The trusted key must be supplied through the release governance process.
 
