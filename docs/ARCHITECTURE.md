@@ -1,70 +1,75 @@
 # Architecture
 
-StructuraX v0.1 is a deterministic trust layer for normalized construction document packs. Its job is to make risk signals inspectable and reproducible before probabilistic extraction or reasoning is introduced.
+StructuraX v0.2 extends the deterministic v0.1 trust layer with a fail-closed ingestion
+and evaluation boundary while keeping probabilistic extraction and operational actions
+outside the core.
 
 ## Processing flow
 
 ```mermaid
 flowchart TD
-    A["Synthetic JSON pack"] --> B["Strict validation"]
-    B --> C["Arithmetic controls"]
-    B --> D["Cross-document controls"]
-    B --> E["Security and approval controls"]
+    A["Untrusted local PDF bytes"] --> P["Strict PDF preflight"]
+    P -->|reject| Q["Fail closed"]
+    P -->|accepted| I["Closed adapter contract"]
+    I --> R["Recorded/network-free extraction"]
+    R --> V["Source + adapter + extraction provenance"]
+    V --> N["Normalized evidence boundary"]
+    N --> B["Strict document-pack validation"]
+    B --> C["Deterministic rules"]
     C --> F["Evidence-backed findings"]
-    D --> F
-    E --> F
-    F --> G["Deterministic disposition"]
-    G --> H["JSON and Markdown reports"]
-    H --> I["Authorized human review"]
+    F --> X["TR/EN reviewer explanation"]
+    F --> H["Side-effect-free human feedback"]
+    C --> M["Rule-family regression metrics"]
 ```
 
-## Components
+## v0.2 ingestion boundary
 
-### Data contracts
+`ingestion.py` accepts bounded local PDF bytes, validates the PDF header/terminal marker,
+rejects selected active/opaque content markers and enforces maximum source/page/text
+limits. It then invokes a typed adapter contract whose declared sandbox profile must keep
+network, subprocess, filesystem-write and external-model access disabled.
 
-`models.py` defines strict Pydantic models for packs, documents, line items, approvals, policy, evidence, findings, summaries, and reports. Unknown fields are rejected. Document IDs and line-item codes must be unique, and declared relationships must resolve within the pack.
+The built-in `RecordedExtractionAdapter` performs deterministic replay keyed by the exact
+source SHA-256. It does not parse PDFs, call OCR, contact a model, or execute document
+content. This gives CI a safe ingestion boundary to test before a real OCR/parser worker
+is introduced.
 
-The v0.1 contract requires `synthetic_data: true`. This prevents accidental treatment of the bundled foundation as a production document-processing system.
+A declaration in `SandboxProfile` is an application contract, not proof of kernel,
+container, VM or network enforcement. A future live parser/OCR adapter must run in a
+separately enforced sandbox and still emit the same typed artifacts.
 
-### Loader
+## Provenance
 
-`loader.py` reads JSON and validates it at the boundary. It does not fetch remote content, parse PDFs, invoke OCR, or persist source documents.
+Every accepted ingestion artifact binds:
 
-### Rule engine
+- exact source SHA-256 and byte length;
+- source media type;
+- adapter ID/version;
+- canonical adapter-configuration digest; and
+- canonical extraction digest.
 
-`rules.py` contains independent deterministic control families:
+The source document and its extracted text therefore cannot be silently substituted
+without changing evidence.
 
-- arithmetic reconciliation;
-- invoice, purchase-order, and delivery-note comparison;
-- duplicate-invoice detection;
-- high-value approval checks; and
-- embedded control-bypass instruction detection.
+## Evaluation and reviewer boundary
 
-Monetary calculations use `Decimal`. Tolerances and approval thresholds live in a versioned policy file rather than being hidden in prompts.
+`evaluation.py` calculates true-positive, false-positive and false-negative counts plus
+precision/recall by deterministic rule family. The committed labels are synthetic
+regression evidence only.
 
-### Evidence and disposition
+`explanations.py` provides deterministic English/Turkish reviewer explanations for all
+current rule IDs. `feedback.py` records reviewer outcomes as immutable evidence-shaped
+objects and explicitly rejects any claim that recording feedback performed an
+operational action.
 
-Every finding includes a stable rule ID, severity, description, recommendation, and one or more evidence references. Evidence identifies the document, field, observed value, and expected value when applicable.
+## Fixture integrity
 
-The engine assigns a disposition using a small, explicit policy:
+The v0.2 synthetic ingestion manifest is Ed25519-signed and binds exact fixture digests.
+CI verifies signature and file digests before ingestion tests. See `docs/DATA_LINEAGE.md`.
 
-- no findings: `allow`;
-- one or more non-critical findings: `review`;
-- one or more critical findings: `block`.
+## Existing deterministic core
 
-These states guide a review workflow. They do not approve, reject, pay, authenticate, or modify an operational record.
-
-### Reporting
-
-`reporting.py` writes full JSON for machines and Markdown for reviewers. The report includes an input hash, deterministic finding order, severity counts, and a safety disclaimer. Reference packs carry fixed timestamps so their committed reports can be regenerated byte for byte.
-
-## Reproducibility
-
-For the same validated input and policy, StructuraX produces the same input hash, finding order, evidence, and disposition. CI rebuilds the JSON Schema and reference reports, then checks that the committed artifacts remain current.
-
-## Extension boundary
-
-OCR, PDF parsing, classifiers, language models, retrieval, and live-system connectors are intentionally outside the deterministic core. A future adapter must be sandboxed and must emit normalized data plus provenance. Its output must pass the same strict contracts and deterministic controls before reaching a reviewer.
-
-This boundary keeps probabilistic extraction separate from deterministic policy enforcement and makes model changes measurable rather than implicit.
-
+The v0.1 `models.py`, `rules.py`, `engine.py` and reporting semantics remain unchanged:
+unknown fields fail validation; monetary logic uses `Decimal`; findings retain stable rule
+IDs and field evidence; and `allow/review/block` remain review dispositions rather than
+authorization to pay, approve or mutate an operational record.

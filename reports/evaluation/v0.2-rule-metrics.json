@@ -1,0 +1,52 @@
+{
+  "case_count": 2,
+  "limitations": [
+    "Metrics describe the committed synthetic/labeled evaluation cases only.",
+    "They are regression evidence, not production fraud-detection accuracy claims."
+  ],
+  "macro_precision": 1.0,
+  "macro_recall": 1.0,
+  "metrics": [
+    {
+      "false_negative": 0,
+      "false_positive": 0,
+      "family": "approval",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 1
+    },
+    {
+      "false_negative": 0,
+      "false_positive": 0,
+      "family": "arithmetic",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 1
+    },
+    {
+      "false_negative": 0,
+      "false_positive": 0,
+      "family": "cross_document",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 1
+    },
+    {
+      "false_negative": 0,
+      "false_positive": 0,
+      "family": "duplicate",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 1
+    },
+    {
+      "false_negative": 0,
+      "false_positive": 0,
+      "family": "embedded_instruction",
+      "precision": 1.0,
+      "recall": 1.0,
+      "true_positive": 1
+    }
+  ],
+  "schema_version": "0.2.0"
+}

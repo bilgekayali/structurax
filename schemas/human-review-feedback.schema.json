@@ -1,0 +1,86 @@
+{
+  "$defs": {
+    "ReviewOutcome": {
+      "enum": [
+        "confirmed",
+        "false_positive",
+        "uncertain"
+      ],
+      "title": "ReviewOutcome",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "finding_rule_id": {
+      "pattern": "^[A-Z][A-Z0-9_]{2,79}$",
+      "title": "Finding Rule Id",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "maxLength": 500,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "operational_side_effects_performed": {
+      "const": false,
+      "default": false,
+      "title": "Operational Side Effects Performed",
+      "type": "boolean"
+    },
+    "outcome": {
+      "$ref": "#/$defs/ReviewOutcome"
+    },
+    "rationale_code": {
+      "pattern": "^[A-Z][A-Z0-9_]{2,79}$",
+      "title": "Rationale Code",
+      "type": "string"
+    },
+    "recorded_at": {
+      "format": "date-time",
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "reviewer_role": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Reviewer Role",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.2.0",
+      "default": "0.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_report_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Report Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "finding_rule_id",
+    "source_report_sha256",
+    "outcome",
+    "reviewer_role",
+    "rationale_code",
+    "recorded_at"
+  ],
+  "title": "HumanReviewFeedback",
+  "type": "object"
+}

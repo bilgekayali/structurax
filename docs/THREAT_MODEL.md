@@ -2,63 +2,55 @@
 
 ## Objective
 
-StructuraX v0.1 demonstrates how a deterministic trust layer can surface selected risks in normalized, synthetic construction documents while preserving human authority.
-
-It is an alpha reference implementation, not a complete security, fraud, accounting, legal, or engineering control.
+StructuraX v0.2 demonstrates how untrusted synthetic PDF inputs can cross a bounded,
+provenance-preserving ingestion boundary before deterministic construction-document
+controls and human review. It is an alpha reference implementation, not a complete PDF
+sandbox, malware scanner, fraud detector, accounting control, legal opinion or engineering
+control.
 
 ## Assets
 
-- Integrity of document amounts, quantities, currencies, and payment details.
-- Traceability from every finding to its source field.
-- Integrity of approval requirements and review dispositions.
-- Reproducibility of reports for the same pack and policy.
-- Safety of the demonstration environment.
+- Integrity and provenance of source bytes and extracted text.
+- Integrity of document amounts, quantities, currencies and payment details.
+- Traceability from findings to source fields and rule families.
+- Integrity of human-review feedback evidence.
+- Reproducibility of fixtures, reports and evaluation metrics.
 
 ## Trust boundaries
 
-| Boundary | Trusted in v0.1 | Not established by v0.1 |
+| Boundary | Established in v0.2 | Not established by v0.2 |
 |---|---|---|
-| Input | Schema-valid synthetic JSON | Authenticity of a real source document |
-| Identity | Synthetic IDs are internally consistent | Supplier, approver, signer, or user identity |
-| Policy | Committed policy file is the selected policy | Whether it matches a specific contract or jurisdiction |
-| Execution | Local deterministic Python code | External OCR, model, database, payment, or approval systems |
-| Output | Evidence-backed signals and disposition | Proof of fraud, contractual truth, or permission to act |
+| PDF preflight | Header/EOF, size bounds, selected active-content rejection | Complete PDF safety or malware absence |
+| Built-in adapter | Digest-bound recorded replay; no network/subprocess/model code path | OS/container sandbox proof for a future live adapter |
+| Fixture integrity | Ed25519 signature + exact SHA-256 file binding | Organizational signer identity or production trust anchor |
+| Normalized pack | Strict synthetic JSON validation | Authenticity of a real supplier/source document |
+| Deterministic rules | Reproducible selected risk signals | Exhaustive fraud or contractual-truth determination |
+| Reviewer feedback | Typed, digestable, side-effect-free evidence | Authorization to pay, approve, notify or modify systems |
 
 ## Covered threat examples
 
-| Threat | v0.1 signal | Primary mitigation path |
-|---|---|---|
-| Arithmetic manipulation | Totals do not reconcile | Stop automated flow and reconcile source values |
-| Price or currency drift | Invoice differs from purchase order | Require corrected evidence or authorized change |
-| Overbilling against delivery | Invoiced quantity exceeds delivery note | Verify receipt with site and commercial teams |
-| Payment diversion | Bank account differs from baseline | Block and verify through an independent known channel |
-| Duplicate payment risk | Invoice identity tuple repeats | Hold and reconcile duplicate candidates |
-| Approval bypass | Required role is not approved | Route to the missing authorized reviewer |
-| Prompt/control injection in document text | Bypass-oriented instruction is embedded | Treat document content as untrusted data and block |
+- Truncated/non-PDF input is rejected before extraction.
+- Selected PDF active/opaque content markers fail closed.
+- Source substitution changes SHA-256 and breaks recorded extraction/manifest binding.
+- Adapter configuration/output substitution changes provenance digests.
+- Embedded control-bypass language remains untrusted document data.
+- False positives and false negatives can be measured explicitly by rule family.
 
-## Abuse and failure cases
+## Residual risks and out of scope
 
-- A malicious author may phrase an instruction in a way not covered by the configured indicators.
-- A carefully chosen amount may remain inside a configured tolerance.
-- Incorrect but internally consistent documents can evade arithmetic checks.
-- Missing or false relationships can produce misleading comparisons.
-- Duplicate detection can generate false positives when identifiers are reused legitimately.
-- A clean result can be misinterpreted as approval or authenticity.
-
-Controls therefore produce review signals with evidence; they do not claim exhaustive detection.
-
-## Out of scope
-
-- PDF malware, file-format exploits, macros, and sandbox escape.
-- OCR accuracy, handwriting, stamps, signatures, and image manipulation.
-- Authentication, digital-signature validation, and identity proofing.
-- Contract interpretation, legal or regulatory conclusions, and jurisdiction mapping.
-- Engineering design review, quantity surveying, or site acceptance.
-- Complete fraud detection or production-grade anomaly detection.
-- Storage, retention, access control, tenancy, privacy, and incident response for real documents.
-- Operational actions such as payment, approval, notification, or ERP mutation.
+- PDF parser vulnerabilities, decompression bombs and sandbox escapes are not fully solved by
+  byte-marker preflight.
+- The built-in replay adapter is not a live OCR engine and does not establish OCR accuracy.
+- A malicious PDF can use constructs not covered by the selected marker list.
+- Signatures/stamps/handwriting/image manipulation and digital-signature validation remain
+  out of scope.
+- Authentication, tenancy, retention, privacy, incident response and live-system connectors
+  remain out of scope.
+- Clean results are not approval, authenticity, compliance or safety guarantees.
 
 ## Safe deployment principle
 
-Do not connect the v0.1 demo to production data or live actions. Future integrations should be sandboxed, least-privileged, auditable, and disabled by default. A qualified human must verify source authenticity, policy applicability, and any consequential next step.
-
+Do not connect the v0.2 reference to production documents or consequential actions. A
+future live parser/OCR integration must be separately sandboxed, least-privileged,
+auditable and network-disabled by default. A qualified human remains responsible for
+source authenticity, policy applicability and every consequential next step.

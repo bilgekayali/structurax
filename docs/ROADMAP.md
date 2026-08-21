@@ -13,12 +13,18 @@ The roadmap keeps deterministic controls and human authority ahead of model capa
 
 ## v0.2 — Sandboxed ingestion and evaluation
 
-- [ ] Isolated PDF and OCR adapter interface with provenance.
-- [ ] Adversarial and corrupted-document evaluation set.
-- [ ] English and Turkish reviewer-facing explanations.
-- [ ] False-positive and false-negative measurement by rule family.
-- [ ] Human-review feedback format without production side effects.
-- [ ] Signed fixture manifests and documented data lineage.
+- [x] Isolated PDF/OCR adapter interface with exact source and adapter provenance.
+- [x] Strict PDF preflight with bounded size/content and fail-closed active-content rejection.
+- [x] Network-free digest-bound recorded extraction adapter for synthetic fixtures.
+- [x] Adversarial and corrupted-document evaluation set.
+- [x] English and Turkish reviewer-facing explanations for every current rule ID.
+- [x] False-positive and false-negative measurement by rule family.
+- [x] Human-review feedback format without production side effects.
+- [x] Ed25519-signed fixture manifest and documented data lineage.
+
+The built-in v0.2 adapter is a deterministic replay boundary; it does **not** perform live
+OCR or claim OS/container sandbox enforcement. A future real parser/OCR worker must be
+separately isolated and satisfy the same closed adapter contract.
 
 ## v0.3 — Optional AI adapters
 
@@ -37,5 +43,21 @@ The roadmap keeps deterministic controls and human authority ahead of model capa
 - [ ] Red-team exercise and independent security review.
 - [ ] Deployment guide with explicit human checkpoints and rollback.
 
-The roadmap is directional, not a release commitment. Production use requires a separate risk assessment, governance model, security architecture, and validation against the actual organization, document types, contracts, and jurisdiction.
+## v0.5 — Construction intelligence
 
+- [ ] BOQ and quantity reconciliation.
+- [ ] Contract and variation-order linkage.
+- [ ] Supplier and project-cost anomaly evidence.
+- [ ] Three-way/four-way matching and document lineage graph.
+
+## v1.0 — Stable production reference
+
+- [ ] Stable API/schema compatibility contract.
+- [ ] PostgreSQL tenant isolation and production identity boundary.
+- [ ] Encrypted evidence, observability and deployment reference.
+- [ ] SBOM/provenance, CodeQL and release gates.
+- [ ] Genuine independent security review before formal stable release.
+
+The roadmap is directional, not a release commitment. Production use requires a separate
+risk assessment, governance model, security architecture, and validation against the
+actual organization, document types, contracts, and jurisdiction.

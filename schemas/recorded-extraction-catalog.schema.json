@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "AdapterExtraction": {
+      "additionalProperties": false,
+      "properties": {
+        "pages": {
+          "items": {
+            "$ref": "#/$defs/ExtractedPage"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Pages",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "pages"
+      ],
+      "title": "AdapterExtraction",
+      "type": "object"
+    },
+    "AdapterIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+          "title": "Adapter Id",
+          "type": "string"
+        },
+        "adapter_version": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "sandbox": {
+          "$ref": "#/$defs/SandboxProfile"
+        }
+      },
+      "required": [
+        "adapter_id",
+        "adapter_version"
+      ],
+      "title": "AdapterIdentity",
+      "type": "object"
+    },
+    "ExtractedPage": {
+      "additionalProperties": false,
+      "properties": {
+        "ocr_used": {
+          "default": false,
+          "title": "Ocr Used",
+          "type": "boolean"
+        },
+        "page_number": {
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text": {
+          "maxLength": 10000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "page_number",
+        "text"
+      ],
+      "title": "ExtractedPage",
+      "type": "object"
+    },
+    "SandboxProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "external_model_access": {
+          "const": false,
+          "default": false,
+          "title": "External Model Access",
+          "type": "boolean"
+        },
+        "filesystem_write_access": {
+          "const": false,
+          "default": false,
+          "title": "Filesystem Write Access",
+          "type": "boolean"
+        },
+        "network_access": {
+          "const": false,
+          "default": false,
+          "title": "Network Access",
+          "type": "boolean"
+        },
+        "subprocess_access": {
+          "const": false,
+          "default": false,
+          "title": "Subprocess Access",
+          "type": "boolean"
+        }
+      },
+      "title": "SandboxProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {
+      "$ref": "#/$defs/AdapterIdentity"
+    },
+    "extractions": {
+      "additionalProperties": {
+        "$ref": "#/$defs/AdapterExtraction"
+      },
+      "title": "Extractions",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "0.2.0",
+      "default": "0.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adapter",
+    "extractions"
+  ],
+  "title": "RecordedExtractionCatalog",
+  "type": "object"
+}

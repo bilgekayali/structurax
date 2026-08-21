@@ -1,0 +1,54 @@
+{
+  "$defs": {
+    "ExplanationLanguage": {
+      "enum": [
+        "en",
+        "tr"
+      ],
+      "title": "ExplanationLanguage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "automation_authority": {
+      "const": false,
+      "default": false,
+      "title": "Automation Authority",
+      "type": "boolean"
+    },
+    "language": {
+      "$ref": "#/$defs/ExplanationLanguage"
+    },
+    "review_action": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Review Action",
+      "type": "string"
+    },
+    "rule_id": {
+      "title": "Rule Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "0.2.0",
+      "default": "0.2.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "summary": {
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rule_id",
+    "language",
+    "summary",
+    "review_action"
+  ],
+  "title": "ReviewerExplanation",
+  "type": "object"
+}

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "structurax"
-version = "0.1.0"
+version = "0.2.0"
 description = "Construction document trust and risk analysis engine"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -32,6 +32,7 @@ classifiers = [
   "Topic :: Security",
 ]
 dependencies = [
+  "cryptography>=43,<47",
   "pydantic>=2.8,<3",
 ]
 
