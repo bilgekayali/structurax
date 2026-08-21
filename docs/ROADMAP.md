@@ -51,10 +51,12 @@ schema-valid review bound to the exact repository digest and all gates are re-ru
 
 ## v0.5 — Construction intelligence
 
-- [ ] BOQ and quantity reconciliation.
-- [ ] Contract and variation-order linkage.
-- [ ] Supplier and project-cost anomaly evidence.
-- [ ] Three-way/four-way matching and document lineage graph.
+- [x] BOQ and quantity reconciliation.
+- [x] Contract and approved variation-order linkage with as-of chronology.
+- [x] Supplier historical-median and project-cost anomaly evidence.
+- [x] Three-way/four-way matching and typed document lineage graph.
+- [x] Fail-closed lineage relation semantics and temporal leakage tests.
+- [x] Synthetic clean/risky fixtures, deterministic reports, schemas, CLI and CI coverage.
 
 ## v1.0 — Stable production reference
 

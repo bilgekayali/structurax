@@ -1,4 +1,4 @@
-"""Command-line interface for deterministic analysis and v0.2/v0.3 trust boundaries."""
+"""Command-line interface for deterministic StructuraX trust boundaries through v0.5."""
 
 from __future__ import annotations
 
@@ -12,6 +12,8 @@ from pydantic import ValidationError
 
 from structurax.ai_adapters import AITrustPolicy, RecordedAIAdapter, resolve_ai_extraction
 from structurax.ai_evaluation import AIBenchmarkSuite, evaluate_ai_adapters
+from structurax.construction_intelligence import analyze_construction_case
+from structurax.construction_models import ConstructionIntelligenceCase, ConstructionPolicy
 from structurax.engine import analyze_pack
 from structurax.explanations import reviewer_explanation
 from structurax.feedback import HumanReviewFeedback, feedback_digest
@@ -78,6 +80,14 @@ def build_parser() -> argparse.ArgumentParser:
     ai_benchmark.add_argument("--recordings", action="append", required=True)
     ai_benchmark.add_argument("--policy")
     ai_benchmark.add_argument("--output", required=True)
+
+    construction = subparsers.add_parser(
+        "construction-analyze",
+        help="Run deterministic v0.5 BOQ/contract/variation/matching/lineage analysis",
+    )
+    construction.add_argument("--case", required=True)
+    construction.add_argument("--policy")
+    construction.add_argument("--output", required=True)
     return parser
 
 
@@ -99,6 +109,20 @@ def _load_ai_policy(path: str | Path | None) -> AITrustPolicy:
 
 def _load_ai_suite(path: str | Path) -> AIBenchmarkSuite:
     return AIBenchmarkSuite.model_validate(json.loads(Path(path).read_text(encoding="utf-8")))
+
+
+def _load_construction_policy(path: str | Path | None) -> ConstructionPolicy:
+    if path is None:
+        return ConstructionPolicy()
+    return ConstructionPolicy.model_validate(
+        json.loads(Path(path).read_text(encoding="utf-8"))
+    )
+
+
+def _load_construction_case(path: str | Path) -> ConstructionIntelligenceCase:
+    return ConstructionIntelligenceCase.model_validate(
+        json.loads(Path(path).read_text(encoding="utf-8"))
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -156,6 +180,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             target = _write_json(args.output, report.model_dump(mode="json"))
             print(f"AI benchmark report: {target}")
             print("Live model calls performed: false")
+            return 0
+
+        if args.command == "construction-analyze":
+            construction_case = _load_construction_case(args.case)
+            report = analyze_construction_case(
+                construction_case,
+                _load_construction_policy(args.policy),
+            )
+            target = _write_json(args.output, report.model_dump(mode="json"))
+            print(f"Construction intelligence report: {target}")
+            print(
+                f"Findings: {len(report.findings)}; "
+                f"human review: {str(report.requires_human_review).lower()}"
+            )
+            print("Automation authority: false; operational side effects performed: false")
             return 0
 
         pack = load_pack(args.pack)

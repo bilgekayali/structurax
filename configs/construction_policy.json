@@ -1,0 +1,8 @@
+{
+  "minimum_supplier_history": 3,
+  "project_budget_variance_percent": "5",
+  "quantity_tolerance": "0.001",
+  "rate_tolerance_percent": "2.5",
+  "schema_version": "0.5.0",
+  "supplier_anomaly_percent": "20"
+}

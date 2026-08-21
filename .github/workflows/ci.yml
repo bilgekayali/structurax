@@ -36,6 +36,9 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
+      - name: Validate package version
+        run: python -c "import structurax; assert structurax.__version__ == '0.5.0'"
+
       - name: Validate reference packs
         run: |
           structurax validate --pack datasets/demo/clean_pack.json
@@ -57,7 +60,7 @@ jobs:
             --output /tmp/structurax-ingestion.json
           grep -q '"external_execution_performed": false' /tmp/structurax-ingestion.json
 
-      - name: Enforce closed v0.3 and v0.4 core imports
+      - name: Enforce closed v0.3-v0.5 core imports
         run: |
           python - <<'PY'
           import ast
@@ -68,6 +71,10 @@ jobs:
               "src/structurax/ai_evaluation.py",
               "src/structurax/review_workflow.py",
               "src/structurax/pilot.py",
+              "src/structurax/construction_models.py",
+              "src/structurax/construction_lineage.py",
+              "src/structurax/construction_matching.py",
+              "src/structurax/construction_intelligence.py",
           ):
               tree = ast.parse(Path(relative).read_text(encoding="utf-8"), filename=relative)
               found = set()
@@ -114,6 +121,24 @@ jobs:
           grep -q '"independent_security_review_missing"' reports/evaluation/v0.4-pilot-readiness.json
           grep -q '"deployment_performed": false' reports/evaluation/v0.4-pilot-readiness.json
 
+      - name: Exercise v0.5 construction intelligence
+        run: |
+          python scripts/build_construction_reference.py
+          structurax construction-analyze \
+            --case datasets/construction/clean_case.json \
+            --policy configs/construction_policy.json \
+            --output /tmp/structurax-construction-clean.json
+          grep -q '"findings": \[\]' /tmp/structurax-construction-clean.json
+          grep -q '"status": "matched"' /tmp/structurax-construction-clean.json
+          structurax construction-analyze \
+            --case datasets/construction/risky_case.json \
+            --policy configs/construction_policy.json \
+            --output /tmp/structurax-construction-risky.json
+          grep -q '"status": "block"' /tmp/structurax-construction-risky.json
+          grep -q '"rule_id": "PROJECT_INVOICED_COST_OVERRUN"' /tmp/structurax-construction-risky.json
+          grep -q '"automation_authority": false' /tmp/structurax-construction-risky.json
+          grep -q '"operational_side_effects_performed": false' /tmp/structurax-construction-risky.json
+
       - name: Verify deterministic repository review digest
         run: |
           digest_one="$(python scripts/repository_review_digest.py)"
@@ -125,7 +150,9 @@ jobs:
         run: |
           python scripts/build_ai_fixtures.py
           python scripts/build_pilot_reference.py
+          python scripts/build_construction_reference.py
           python scripts/generate_schema.py
+          python scripts/build_construction_schemas.py
           python scripts/build_demo_reports.py
           python scripts/evaluate_rule_cases.py
           python scripts/evaluate_ai_adapters.py
@@ -133,5 +160,5 @@ jobs:
 
       - name: Verify committed artifacts
         run: |
-          git diff --exit-code -- configs/pilot_policy.json configs/pilot_plan.json datasets/ai datasets/workflow schemas reports/demo reports/evaluation
-          test -z "$(git status --porcelain -- configs/pilot_policy.json configs/pilot_plan.json datasets/ai datasets/workflow schemas reports/demo reports/evaluation)"
+          git diff --exit-code -- configs/pilot_policy.json configs/pilot_plan.json configs/construction_policy.json datasets/ai datasets/workflow datasets/construction schemas reports/demo reports/evaluation
+          test -z "$(git status --porcelain -- configs/pilot_policy.json configs/pilot_plan.json configs/construction_policy.json datasets/ai datasets/workflow datasets/construction schemas reports/demo reports/evaluation)"

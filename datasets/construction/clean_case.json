@@ -1,0 +1,128 @@
+{
+  "boq_lines": [
+    {
+      "artifact_id": "BOQ-001",
+      "budget_amount": "100000",
+      "budget_quantity": "100",
+      "budget_unit_rate": "1000",
+      "description": "C30 concrete",
+      "item_code": "C30",
+      "unit": "m3"
+    }
+  ],
+  "case_id": "clean-construction-case",
+  "contract_lines": [
+    {
+      "artifact_id": "CONTRACT-001",
+      "contracted_quantity": "100",
+      "item_code": "C30",
+      "supplier_id": "SUP-001",
+      "unit": "m3",
+      "unit_rate": "1000"
+    }
+  ],
+  "currency": "TRY",
+  "deliveries": [
+    {
+      "artifact_id": "DN-001",
+      "item_code": "C30",
+      "quantity": "50",
+      "supplier_id": "SUP-001"
+    }
+  ],
+  "generated_at": "2026-08-21T12:00:00Z",
+  "invoices": [
+    {
+      "artifact_id": "INV-001",
+      "item_code": "C30",
+      "quantity": "50",
+      "supplier_id": "SUP-001",
+      "unit_rate": "1000"
+    }
+  ],
+  "lineage_edges": [
+    {
+      "from_artifact_id": "BOQ-001",
+      "relation": "authorizes",
+      "to_artifact_id": "CONTRACT-001"
+    },
+    {
+      "from_artifact_id": "CONTRACT-001",
+      "relation": "orders_against",
+      "to_artifact_id": "PO-001"
+    },
+    {
+      "from_artifact_id": "PO-001",
+      "relation": "fulfills",
+      "to_artifact_id": "DN-001"
+    },
+    {
+      "from_artifact_id": "PO-001",
+      "relation": "invoices_against",
+      "to_artifact_id": "INV-001"
+    }
+  ],
+  "lineage_nodes": [
+    {
+      "artifact_id": "BOQ-001",
+      "artifact_type": "boq",
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "artifact_id": "CONTRACT-001",
+      "artifact_type": "contract",
+      "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "artifact_id": "DN-001",
+      "artifact_type": "delivery",
+      "source_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "artifact_id": "INV-001",
+      "artifact_type": "invoice",
+      "source_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "artifact_id": "PO-001",
+      "artifact_type": "purchase_order",
+      "source_sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "project_id": "PRJ-001",
+  "purchase_orders": [
+    {
+      "artifact_id": "PO-001",
+      "item_code": "C30",
+      "quantity": "50",
+      "supplier_id": "SUP-001",
+      "unit_rate": "1000"
+    }
+  ],
+  "schema_version": "0.5.0",
+  "supplier_price_history": [
+    {
+      "evidence_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "item_code": "C30",
+      "observed_at": "2026-05-01",
+      "supplier_id": "SUP-001",
+      "unit_rate": "990"
+    },
+    {
+      "evidence_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "item_code": "C30",
+      "observed_at": "2026-06-01",
+      "supplier_id": "SUP-001",
+      "unit_rate": "1000"
+    },
+    {
+      "evidence_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "item_code": "C30",
+      "observed_at": "2026-07-01",
+      "supplier_id": "SUP-001",
+      "unit_rate": "1010"
+    }
+  ],
+  "synthetic_data": true,
+  "variation_orders": []
+}

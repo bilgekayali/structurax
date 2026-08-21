@@ -2,16 +2,16 @@
 
 [![CI](https://github.com/bilgekayali/structurax/actions/workflows/ci.yml/badge.svg)](https://github.com/bilgekayali/structurax/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.11--3.13-3776AB)
-![Status](https://img.shields.io/badge/status-v0.4%20controlled%20pilot%20reference-5B5BD6)
+![Status](https://img.shields.io/badge/status-v0.5%20construction%20intelligence-5B5BD6)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 [![Data license](https://img.shields.io/badge/synthetic%20data-CC%20BY%204.0-orange)](DATA_LICENSE.md)
 
-StructuraX is an open-source foundation for trustworthy, AI-assisted construction document workflows. It detects inconsistencies, risk signals, embedded instructions and approval gaps across quotes, purchase orders, delivery notes and invoices while keeping model output behind deterministic controls and explicit human authority.
+StructuraX is an open-source foundation for trustworthy, AI-assisted construction-document workflows. It combines deterministic document controls, bounded AI evidence, human review governance and construction-commercial intelligence without granting autonomous payment, procurement or deployment authority.
 
-**v0.4** adds a controlled-pilot governance reference above the v0.1-v0.3 trust boundaries: role-based review, maker-checker enforcement, hash-linked audit events, policy version/change governance, privacy/access/incident requirements, explicit human deployment checkpoints, rollback contracts, a synthetic red-team exercise, and a fail-closed independent-security-review gate.
+**v0.5** adds a strict construction-intelligence layer for BOQ reconciliation, contract and approved variation authority, three-way/four-way matching, supplier historical-median signals, project-cost variance evidence and typed document lineage.
 
 > [!IMPORTANT]
-> Every committed document, model response, approval event and checkpoint evidence is synthetic/reference-only. StructuraX performs no live OCR/model call, payment, ERP mutation, deployment, external notification, or autonomous approval. The committed v0.4 pilot-readiness assessment is deliberately `eligible=false` until a genuine independent security review exists for the exact repository state.
+> Every committed document, model response, commercial record and review artifact is synthetic/reference-only. StructuraX performs no live OCR/model call, payment, ERP mutation, procurement commitment, deployment, external notification or autonomous approval. `matched`, `review` and `block` are evidence classifications for human review, not operational decisions.
 
 ## Trust flow
 
@@ -26,17 +26,17 @@ flowchart TD
     J -->|pass| S["AI evidence selected"]
     F --> D["Deterministic document controls"]
     S --> D
-    D --> C["v0.4 review case bound to exact artifact + policy digest"]
+    D --> C["v0.4 review case + exact policy digest"]
     C --> M["Maker-checker / RBAC"]
-    M --> E["Hash-linked immutable audit evidence"]
-    E --> H["Human approval / rejection"]
-    H --> G{"Controlled-pilot readiness gate"}
-    G -->|missing independent review| B["Ineligible"]
+    M --> E["Tamper-evident audit history"]
+    E --> K["v0.5 BOQ / contract / VO / PO / delivery / invoice evidence"]
+    K --> L["Three-way / four-way matching + lineage + cost evidence"]
+    L --> H["Human review"]
 ```
 
-## Current deterministic controls
+## Deterministic controls through v0.5
 
-| Control | Example signal |
+| Area | Example signal |
 |---|---|
 | Arithmetic | Quantity × unit price, subtotal, tax or total does not reconcile |
 | Currency | Invoice currency differs from purchase order |
@@ -46,10 +46,17 @@ flowchart TD
 | Duplicate detection | Supplier/reference/currency/total tuple repeats |
 | Approval governance | Required high-value approval role is missing |
 | Document-content security | Embedded control-bypass instruction appears in text |
+| BOQ reconciliation | Authorized contract/variation quantity exceeds BOQ baseline |
+| Contract authority | Invoice quantity/rate exceeds contract plus effective approved VO authority |
+| Three-way matching | Invoice does not reconcile to PO and delivery quantities |
+| Four-way matching | Invoice lacks contract authority or a declared contract lineage path |
+| Project-cost evidence | Authorized or invoiced value exceeds BOQ variance threshold |
+| Supplier anomaly evidence | Unit rate deviates from deterministic historical median |
+| Lineage | Artifact relation/type mismatch or missing invoice-to-contract path |
 
 ## v0.2 ingestion boundary
 
-The core preflight rejects empty, oversized, malformed/truncated and selected active/opaque PDF inputs before any adapter is invoked. Accepted source bytes, adapter identity/configuration and extraction output are bound to SHA-256 provenance. The built-in adapter is digest-bound recorded replay only.
+The PDF preflight rejects empty, oversized, malformed/truncated and selected active/opaque inputs before any adapter is invoked. Accepted source bytes, adapter configuration and extraction output are SHA-256 bound. The built-in adapter is digest-bound recorded replay only.
 
 ```bash
 structurax verify-fixtures \
@@ -61,9 +68,9 @@ structurax verify-fixtures \
 
 ## v0.3 AI adapter boundary
 
-The provider-neutral AI request is bound to exact source and v0.2 extraction digests. Returned fields outside the requested field set fail closed; cited-page evidence hashes and canonical response hashes are recomputed. Prompt-injection indicators can block adapter invocation entirely, and low-confidence or incomplete responses fall back deterministically.
+The provider-neutral request is bound to exact source and v0.2 extraction digests. Unrequested fields fail closed; cited-page evidence hashes and canonical response hashes are recomputed. Prompt-injection indicators can block adapter invocation, and low-confidence/incomplete responses fall back deterministically.
 
-Even a selected AI result carries:
+Selected AI evidence still carries:
 
 ```text
 requires_human_review = true
@@ -71,62 +78,58 @@ automation_authority = false
 operational_side_effects_performed = false
 ```
 
-```bash
-structurax ai-replay \
-  --cases datasets/ai/benchmark_cases.json \
-  --case-id clean-invoice \
-  --recordings datasets/ai/recorded_adapter_a.json \
-  --output reports/local-ai-resolution.json
-```
-
 ## v0.4 controlled review workflow
 
-A `ReviewCase` binds one exact evidence artifact digest to one exact `WorkflowPolicy` digest. Workflow transitions are role-gated. The case creator may submit/resubmit/cancel but cannot approve their own case. If a policy specifies approval owners, another approver with the same role still cannot approve unless their identity is explicitly owned by the policy.
+A `ReviewCase` binds one exact evidence artifact to one exact `WorkflowPolicy`. Transitions are role-gated, maker-checker is enforced, and policy-defined approval owners cannot be bypassed. Hash-linked audit events are verified both structurally and by semantic replay of policy/RBAC rules.
 
-Every accepted action becomes an `AuditEvent` whose digest covers the exact prior-event hash, actor, action, policy digest, timestamp and payload digest. Raw document content and operational side-effect claims are forbidden in the audit contract.
+The hash chain is **tamper-evident evidence**, not proof of append-only/WORM storage. Real immutability requires separately enforced storage and IAM controls.
 
-Policy replacement is also digest-bound: a new version must name a distinct human author/approver pair, a change ticket, a later effective time and the exact SHA-256 of the policy it supersedes.
+The v0.4 controlled-pilot readiness artifact remains intentionally ineligible while a genuine independent security review is absent. Later source milestones do not fabricate or retroactively satisfy that review requirement.
 
 See [Controlled Pilot Governance](docs/PILOT_GOVERNANCE.md).
 
-## Pilot security / privacy / rollback reference
+## v0.5 construction intelligence
 
-`configs/pilot_plan.json` is a synthetic, reference-only design requiring:
+The v0.5 commercial authority model is explicit:
 
-- bounded retention and no secrets/raw document text in evidence;
-- default-deny access, MFA for humans, non-interactive service accounts, tenant boundaries and reviewed break-glass;
-- explicit security/privacy/AI-control incident ownership;
-- backup and rollback-test evidence;
-- exactly four human checkpoints: business owner, privacy, security and workflow owner;
-- no live model calls, no automated approval and no deployment performed by the repository.
-
-See [Pilot Security, Privacy, and Incident Boundaries](docs/PILOT_SECURITY.md) and [Controlled Pilot Deployment Reference](docs/DEPLOYMENT_PILOT.md).
-
-## Synthetic red-team and readiness evidence
-
-```bash
-python scripts/build_pilot_reference.py
-python scripts/evaluate_pilot_controls.py
+```text
+BOQ -> contract -> approved/effective linked variation order
+contract -> purchase order -> delivery
+contract -> purchase order -> invoice
 ```
 
-The deterministic red-team exercise covers audit-chain tampering, maker-checker self-approval, unauthorized approval ownership, policy substitution and the independent-review gate. The resulting `reports/evaluation/v0.4-pilot-readiness.json` remains ineligible while `security-review/v0.4-review.json` is absent.
+Only approved variation orders with approval evidence, an explicit contract amendment edge, and `effective_at <= case.generated_at` can extend current authority. Pending, rejected, unlinked or future-effective variations do not authorize present quantities/rates.
 
-A real independent reviewer must compute the reviewed source digest with:
+Lineage edges are type constrained: BOQ can authorize contracts, contracts can amend VOs and authorize POs, POs can fulfill deliveries and support invoices. Unknown artifacts, duplicate/non-canonical edges and relation/type substitution fail closed.
+
+Supplier price history is also time bounded: future observations relative to the case timestamp are rejected so historical-median evidence cannot use future data.
+
+Run the synthetic reference analysis:
 
 ```bash
-python scripts/repository_review_digest.py
+structurax construction-analyze \
+  --case datasets/construction/clean_case.json \
+  --policy configs/construction_policy.json \
+  --output reports/local-construction-clean.json
+
+structurax construction-analyze \
+  --case datasets/construction/risky_case.json \
+  --policy configs/construction_policy.json \
+  --output reports/local-construction-risky.json
 ```
 
-and follow [security-review/README.md](security-review/README.md). Reviewer identity, independence, findings and evidence must never be fabricated or inferred from CI/merge approval.
+See [v0.5 Construction Intelligence](docs/CONSTRUCTION_INTELLIGENCE.md).
 
 ## Evaluation evidence
 
 - `reports/evaluation/v0.2-rule-metrics.json`: deterministic rule-family regression metrics.
 - `reports/evaluation/v0.3-ai-adapters.json`: synthetic adapter accuracy/evidence/latency/cost comparison.
 - `reports/evaluation/v0.4-red-team.json`: synthetic governance red-team results.
-- `reports/evaluation/v0.4-pilot-readiness.json`: fail-closed pilot gate; currently blocked on independent review.
+- `reports/evaluation/v0.4-pilot-readiness.json`: fail-closed controlled-pilot gate; independent review still missing.
+- `reports/evaluation/v0.5-clean-construction.json`: clean four-way match reference.
+- `reports/evaluation/v0.5-risky-construction.json`: BOQ, cost, matching and supplier-anomaly review evidence.
 
-These are reproducibility and control-boundary artefacts, not production effectiveness or regulatory-compliance claims.
+These are reproducibility and control-boundary artifacts, not production effectiveness, legal, contractual or regulatory-compliance claims.
 
 ## Existing normalized-pack workflow
 
@@ -154,7 +157,9 @@ python app.py
 ```bash
 python scripts/build_ai_fixtures.py
 python scripts/build_pilot_reference.py
+python scripts/build_construction_reference.py
 python scripts/generate_schema.py
+python scripts/build_construction_schemas.py
 python scripts/build_demo_reports.py
 python scripts/evaluate_rule_cases.py
 python scripts/evaluate_ai_adapters.py
@@ -162,11 +167,11 @@ python scripts/evaluate_pilot_controls.py
 python -m unittest discover -s tests -v
 ```
 
-CI runs on Python 3.11/3.12/3.13, verifies v0.2 signed fixtures, exercises v0.3 offline AI replay, enforces closed runtime imports for v0.3/v0.4 core, reruns v0.4 red-team/readiness gates, recomputes deterministic repository review digests, regenerates all committed machine contracts and fails on stale artifacts.
+CI runs on Python 3.11/3.12/3.13, verifies v0.2 signed fixtures, exercises v0.3 offline replay, reruns v0.4 governance gates, executes v0.5 construction analysis through the public CLI, blocks live-execution imports in bounded core modules, regenerates committed artifacts and fails on stale evidence.
 
 ## Scope and limitations
 
-StructuraX v0.4 does not authenticate real parties, validate legal digital signatures, perform live OCR or live LLM/provider calls, prove PDF malware absence, deploy infrastructure, prove IAM/tenant isolation, approve/pay documents, mutate ERP data, send regulatory notifications, or determine contractual/legal/engineering truth. It does not claim fraud-detection accuracy, model safety/factuality, legal compliance, certification, production fitness or supervisory acceptance.
+StructuraX v0.5 does not authenticate real parties, validate legal digital signatures, perform live OCR or live LLM/provider calls, prove PDF malware absence, deploy infrastructure, prove production IAM/tenant isolation, approve/pay documents, issue purchase commitments, mutate ERP data or determine contractual/legal/engineering truth. Supplier anomalies are not proof of fraud or overcharging. Cost variance is not a legal determination of entitlement or liability. The project does not claim certification, production fitness, regulatory compliance or supervisory acceptance.
 
 See [Roadmap](docs/ROADMAP.md).
 
