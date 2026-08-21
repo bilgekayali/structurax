@@ -1,0 +1,67 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "automation_authority": {
+      "const": false,
+      "default": false,
+      "title": "Automation Authority",
+      "type": "boolean"
+    },
+    "case_id": {
+      "pattern": "^[A-Z0-9][A-Z0-9._-]{2,79}$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "created_by": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Created By",
+      "type": "string"
+    },
+    "data_classification": {
+      "default": "synthetic",
+      "enum": [
+        "synthetic",
+        "pilot_restricted"
+      ],
+      "title": "Data Classification",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "requires_human_review": {
+      "const": true,
+      "default": true,
+      "title": "Requires Human Review",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "subject_artifact_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Subject Artifact Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "subject_artifact_sha256",
+    "policy_sha256",
+    "created_by",
+    "created_at"
+  ],
+  "title": "ReviewCase",
+  "type": "object"
+}
