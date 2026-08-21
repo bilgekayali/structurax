@@ -1,0 +1,175 @@
+{
+  "$defs": {
+    "AIBenchmarkCase": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+          "title": "Case Id",
+          "type": "string"
+        },
+        "expected_fields": {
+          "items": {
+            "$ref": "#/$defs/ExpectedAIField"
+          },
+          "title": "Expected Fields",
+          "type": "array"
+        },
+        "fallback": {
+          "$ref": "#/$defs/DeterministicFallbackArtifact"
+        },
+        "request": {
+          "$ref": "#/$defs/AIExtractionRequest"
+        }
+      },
+      "required": [
+        "case_id",
+        "request",
+        "expected_fields",
+        "fallback"
+      ],
+      "title": "AIBenchmarkCase",
+      "type": "object"
+    },
+    "AIExtractionRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "ingestion_extraction_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Ingestion Extraction Sha256",
+          "type": "string"
+        },
+        "pages": {
+          "items": {
+            "$ref": "#/$defs/AIPageInput"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Pages",
+          "type": "array"
+        },
+        "requested_fields": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 64,
+          "minItems": 1,
+          "title": "Requested Fields",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "0.3.0",
+          "default": "0.3.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_sha256",
+        "ingestion_extraction_sha256",
+        "pages",
+        "requested_fields"
+      ],
+      "title": "AIExtractionRequest",
+      "type": "object"
+    },
+    "AIPageInput": {
+      "additionalProperties": false,
+      "properties": {
+        "page_number": {
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text": {
+          "maxLength": 10000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "page_number",
+        "text"
+      ],
+      "title": "AIPageInput",
+      "type": "object"
+    },
+    "DeterministicFallbackArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Artifact Sha256",
+          "type": "string"
+        },
+        "artifact_type": {
+          "const": "deterministic_normalized_document",
+          "default": "deterministic_normalized_document",
+          "title": "Artifact Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact_sha256"
+      ],
+      "title": "DeterministicFallbackArtifact",
+      "type": "object"
+    },
+    "ExpectedAIField": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Evidence Text Sha256",
+          "type": "string"
+        },
+        "field_name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Field Name",
+          "type": "string"
+        },
+        "value": {
+          "maxLength": 5000,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field_name",
+        "value",
+        "evidence_text_sha256"
+      ],
+      "title": "ExpectedAIField",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cases": {
+      "items": {
+        "$ref": "#/$defs/AIBenchmarkCase"
+      },
+      "minItems": 1,
+      "title": "Cases",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.3.0",
+      "default": "0.3.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cases"
+  ],
+  "title": "AIBenchmarkSuite",
+  "type": "object"
+}

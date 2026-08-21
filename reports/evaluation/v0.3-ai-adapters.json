@@ -1,0 +1,43 @@
+{
+  "limitations": [
+    "Metrics describe committed synthetic recorded responses only.",
+    "Provider and model labels are synthetic references, not vendor performance claims.",
+    "No live model, network, tool, or production document call is performed by this benchmark."
+  ],
+  "live_model_calls_performed": false,
+  "metrics": [
+    {
+      "adapter_id": "synthetic-adapter-a",
+      "average_cost_usd": 0.001,
+      "average_latency_ms": 125.0,
+      "case_count": 3,
+      "evidence_fidelity": 0.6,
+      "evidence_match_count": 3,
+      "exact_field_accuracy": 0.6,
+      "exact_field_match_count": 3,
+      "expected_field_count": 5,
+      "fallback_count": 2,
+      "invocation_count": 2,
+      "model_label": "reference-model-a",
+      "provider_label": "synthetic-provider-a",
+      "total_cost_usd": 0.002
+    },
+    {
+      "adapter_id": "synthetic-adapter-b",
+      "average_cost_usd": 0.002,
+      "average_latency_ms": 205.0,
+      "case_count": 3,
+      "evidence_fidelity": 1.0,
+      "evidence_match_count": 5,
+      "exact_field_accuracy": 0.8,
+      "exact_field_match_count": 4,
+      "expected_field_count": 5,
+      "fallback_count": 1,
+      "invocation_count": 2,
+      "model_label": "reference-model-b",
+      "provider_label": "synthetic-provider-b",
+      "total_cost_usd": 0.004
+    }
+  ],
+  "schema_version": "0.3.0"
+}

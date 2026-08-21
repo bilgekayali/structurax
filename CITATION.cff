@@ -5,8 +5,8 @@ type: software
 authors:
   - family-names: "Kayalı"
     given-names: "Bilge"
-version: 0.2.0
-date-released: 2026-08-20
+version: 0.3.0
+date-released: 2026-08-21
 repository-code: "https://github.com/bilgekayali/structurax"
 url: "https://github.com/bilgekayali/structurax"
 license: Apache-2.0
@@ -16,3 +16,4 @@ keywords:
   - risk analysis
   - trustworthy AI
   - document ingestion provenance
+  - AI extraction governance

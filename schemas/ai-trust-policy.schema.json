@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "minimum_field_confidence": {
+      "default": 0.75,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Minimum Field Confidence",
+      "type": "number"
+    },
+    "minimum_overall_confidence": {
+      "default": 0.8,
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Minimum Overall Confidence",
+      "type": "number"
+    },
+    "prompt_injection_indicators": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Prompt Injection Indicators",
+      "type": "array"
+    },
+    "required_fields": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Required Fields",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.3.0",
+      "default": "0.3.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "title": "AITrustPolicy",
+  "type": "object"
+}
