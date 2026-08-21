@@ -196,9 +196,23 @@ class ConstructionIntelligenceCase(StrictModel):
             raise ValueError("lineage nodes must be unique and canonically sorted")
         known = set(node_ids)
         node_types = {node.artifact_id: node.artifact_type for node in self.lineage_nodes}
+        allowed_relations = {
+            LineageRelation.AUTHORIZES: (ArtifactType.BOQ, ArtifactType.CONTRACT),
+            LineageRelation.AMENDS: (ArtifactType.CONTRACT, ArtifactType.VARIATION_ORDER),
+            LineageRelation.ORDERS_AGAINST: (ArtifactType.CONTRACT, ArtifactType.PURCHASE_ORDER),
+            LineageRelation.FULFILLS: (ArtifactType.PURCHASE_ORDER, ArtifactType.DELIVERY),
+            LineageRelation.INVOICES_AGAINST: (ArtifactType.PURCHASE_ORDER, ArtifactType.INVOICE),
+        }
         for edge in self.lineage_edges:
             if edge.from_artifact_id not in known or edge.to_artifact_id not in known:
                 raise ValueError("lineage edges must reference known artifacts")
+            expected_from, expected_to = allowed_relations[edge.relation]
+            observed = (node_types[edge.from_artifact_id], node_types[edge.to_artifact_id])
+            if observed != (expected_from, expected_to):
+                raise ValueError(
+                    f"{edge.relation.value} lineage must connect "
+                    f"{expected_from.value} to {expected_to.value}"
+                )
         edge_keys = [
             (edge.from_artifact_id, edge.to_artifact_id, edge.relation.value)
             for edge in self.lineage_edges
@@ -232,6 +246,14 @@ class ConstructionIntelligenceCase(StrictModel):
         boq_keys = [line.item_code for line in self.boq_lines]
         if boq_keys != sorted(set(boq_keys)):
             raise ValueError("BOQ item codes must be unique and canonically sorted")
+        history_keys = [
+            (item.supplier_id, item.item_code, item.observed_at, item.evidence_sha256)
+            for item in self.supplier_price_history
+        ]
+        if history_keys != sorted(set(history_keys)):
+            raise ValueError("supplier price history must be unique and canonically sorted")
+        if any(item.observed_at > self.generated_at.date() for item in self.supplier_price_history):
+            raise ValueError("supplier price history cannot include future observations")
         return self
 
 
