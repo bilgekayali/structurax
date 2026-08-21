@@ -49,6 +49,22 @@
       "title": "Authorized contract cost exceeds BOQ budget threshold"
     },
     {
+      "description": "Cumulative invoiced value exceeds the configured BOQ budget variance threshold.",
+      "evidence": [
+        {
+          "artifact_id": "BOQ-001",
+          "expected": "100000.00",
+          "field": "project_invoiced_vs_boq",
+          "observed": "162000.00"
+        }
+      ],
+      "recommendation": "Reconcile invoiced value to approved budget, contract authority, forecast and payment history before further approval.",
+      "requires_human_review": true,
+      "rule_id": "PROJECT_INVOICED_COST_OVERRUN",
+      "severity": "high",
+      "title": "Invoiced project cost exceeds BOQ budget threshold"
+    },
+    {
       "description": "Cumulative invoice quantity for C30 exceeds or lacks delivery evidence.",
       "evidence": [
         {
