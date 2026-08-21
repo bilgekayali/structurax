@@ -9,6 +9,8 @@
     "external_identity_boundary_validated": false,
     "evidence_encryption_and_key_management_validated": false,
     "observability_and_deployment_controls_validated": false,
+    "main_branch_protection_verified": false,
+    "required_status_checks_verified": false,
     "complete_release_sbom_attached": false,
     "build_provenance_attested": false,
     "codeql_release_gate_enforced": false,
