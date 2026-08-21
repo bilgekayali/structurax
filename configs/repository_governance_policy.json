@@ -10,6 +10,7 @@
     "security-reference-validation",
     "deployment-reference-validation",
     "release-evidence-validation",
+    "production-evidence-harness",
     "CodeQL (python)"
   ],
   "manual_controls_expected": {

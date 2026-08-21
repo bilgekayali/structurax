@@ -1,4 +1,4 @@
-"""Compute the canonical Git-tracked repository digest for independent security review."""
+"""Compute the canonical Git-tracked repository digest for independent review/evidence binding."""
 from __future__ import annotations
 
 import hashlib
@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED = {
     "security-review/v0.4-review.json",
     "security-review/v1.0-review.json",
+    "production-evidence/v1.0-controls.json",
 }
 
 

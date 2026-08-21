@@ -1,0 +1,49 @@
+name: Production Evidence Harness
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-evidence-harness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Confirm production evidence is not fabricated in CI
+        run: |
+          test ! -f production-evidence/v1.0-controls.json
+          python scripts/verify_production_evidence.py > /tmp/structurax-production-evidence.json
+          grep -q '"available": false' /tmp/structurax-production-evidence.json
+          grep -q '"production_evidence_missing"' /tmp/structurax-production-evidence.json
+          grep -q '"formal_gate_mutation_authorized": false' /tmp/structurax-production-evidence.json
+          grep -q '"production_readiness_claimed": false' /tmp/structurax-production-evidence.json
+
+      - name: Verify stable application schema freeze is unchanged
+        run: |
+          test -f release-evidence-schemas/production-control-evidence.schema.json
+          python scripts/verify_stable_schemas.py > /tmp/structurax-stable-schemas.json
+          grep -q '"schema_count": 23' /tmp/structurax-stable-schemas.json
+          grep -q '"final_v1_freeze": true' /tmp/structurax-stable-schemas.json
+
+      - name: Run production evidence harness tests
+        run: python -m unittest tests.test_v10_production_evidence_harness -v
