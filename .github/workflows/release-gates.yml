@@ -65,6 +65,10 @@ jobs:
         run: |
           python scripts/assess_release_gate.py > /tmp/structurax-release-gate.json
           grep -q '"eligible": false' /tmp/structurax-release-gate.json
+          grep -q '"postgresql_tenant_isolation_validated"' /tmp/structurax-release-gate.json
+          grep -q '"external_identity_boundary_validated"' /tmp/structurax-release-gate.json
+          grep -q '"evidence_encryption_and_key_management_validated"' /tmp/structurax-release-gate.json
+          grep -q '"observability_and_deployment_controls_validated"' /tmp/structurax-release-gate.json
           grep -q '"independent_security_review_verified"' /tmp/structurax-release-gate.json
           grep -q '"main_branch_protection_verified"' /tmp/structurax-release-gate.json
           grep -q '"required_status_checks_verified"' /tmp/structurax-release-gate.json
@@ -77,3 +81,4 @@ jobs:
           python -m unittest tests.test_v10_release_gates -v
           python -m unittest tests.test_v10_repository_governance -v
           python -m unittest tests.test_v10_contract_freeze_deployment -v
+          python -m unittest tests.test_v10_production_evidence_harness -v

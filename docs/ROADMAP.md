@@ -71,6 +71,12 @@ content identities. Security, encryption, PostgreSQL, identity, observability an
 reference controls are executable and fail closed, but reference validation is not a claim that
 a production environment enforces those controls.
 
+A production-evidence harness now defines an Ed25519-signed, exact-repository-digest-bound
+contract for real PostgreSQL, identity, KMS/encryption and observability/deployment validation.
+Ordinary CI deliberately contains no production evidence and cannot auto-promote those controls;
+a trusted validator key and real external evidence remain required before human-reviewed gate
+promotion.
+
 Release-candidate supply-chain preparation now binds the wheel, dependency SBOM, source
 provenance and release-gate output into a deterministic SHA-256 evidence manifest before any
 manual GitHub attestation step. This is preparation only: the SBOM/provenance milestone remains
