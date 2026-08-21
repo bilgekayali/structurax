@@ -1,0 +1,28 @@
+{
+  "compatibility_rule": "Required v0.5 public exports must remain importable during v1.0 preparation. Additions require explicit contract review.",
+  "contract_version": "1.0-prep",
+  "forbidden_public_export_prefixes": [
+    "_",
+    "unsafe_",
+    "auto_"
+  ],
+  "package_version_at_baseline": "0.5.0",
+  "production_readiness_claimed": false,
+  "required_public_exports": [
+    "AnalysisReport",
+    "DocumentPack",
+    "Policy",
+    "analyze_construction_case",
+    "analyze_pack",
+    "assess_pilot_readiness",
+    "evaluate_ai_adapters",
+    "evaluate_rule_families",
+    "ingest_pdf_bytes",
+    "ingest_pdf_path",
+    "resolve_ai_extraction",
+    "run_ai_extraction",
+    "verify_audit_chain",
+    "verify_audit_history"
+  ],
+  "status": "draft-pre-release"
+}
