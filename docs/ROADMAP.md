@@ -28,12 +28,16 @@ separately isolated and satisfy the same closed adapter contract.
 
 ## v0.3 — Optional AI adapters
 
-- [ ] Provider-neutral extraction adapter contract.
-- [ ] Recorded-response replay so tests do not require model calls.
-- [ ] Model comparison by accuracy, evidence fidelity, latency, and cost.
-- [ ] Prompt-injection resistance tests at the untrusted-content boundary.
-- [ ] Confidence abstention and deterministic fallback behavior.
-- [ ] Network and tool access disabled by default.
+- [x] Provider-neutral extraction adapter contract.
+- [x] Recorded-response replay so tests do not require model calls.
+- [x] Synthetic model comparison by accuracy, evidence fidelity, latency, and cost.
+- [x] Prompt-injection resistance tests at the untrusted-content boundary.
+- [x] Confidence abstention and deterministic fallback behavior.
+- [x] Network and tool access disabled by default in the accepted core adapter profile.
+
+The built-in v0.3 implementation remains offline and synthetic. It defines the contract a
+future separately operated provider integration must satisfy; it does not ship credentials,
+live model calls, network permission, or autonomous action authority.
 
 ## v0.4 — Controlled pilot readiness
 
@@ -60,4 +64,4 @@ separately isolated and satisfy the same closed adapter contract.
 
 The roadmap is directional, not a release commitment. Production use requires a separate
 risk assessment, governance model, security architecture, and validation against the
-actual organization, document types, contracts, and jurisdiction.
+actual organization, document types, contracts, models, providers and jurisdiction.

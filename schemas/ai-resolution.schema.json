@@ -1,0 +1,277 @@
+{
+  "$defs": {
+    "AIAdapterIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+          "title": "Adapter Id",
+          "type": "string"
+        },
+        "adapter_version": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "execution_profile": {
+          "$ref": "#/$defs/AIExecutionProfile"
+        },
+        "model_label": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Model Label",
+          "type": "string"
+        },
+        "provider_label": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Provider Label",
+          "type": "string"
+        },
+        "response_format": {
+          "default": "structurax-ai-fields-v1",
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Response Format",
+          "type": "string"
+        }
+      },
+      "required": [
+        "adapter_id",
+        "adapter_version",
+        "provider_label",
+        "model_label"
+      ],
+      "title": "AIAdapterIdentity",
+      "type": "object"
+    },
+    "AIExecutionProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "filesystem_write_access": {
+          "const": false,
+          "default": false,
+          "title": "Filesystem Write Access",
+          "type": "boolean"
+        },
+        "network_access": {
+          "const": false,
+          "default": false,
+          "title": "Network Access",
+          "type": "boolean"
+        },
+        "subprocess_access": {
+          "const": false,
+          "default": false,
+          "title": "Subprocess Access",
+          "type": "boolean"
+        },
+        "tool_access": {
+          "const": false,
+          "default": false,
+          "title": "Tool Access",
+          "type": "boolean"
+        }
+      },
+      "title": "AIExecutionProfile",
+      "type": "object"
+    },
+    "AIExtractionArtifact": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {
+          "$ref": "#/$defs/AIAdapterIdentity"
+        },
+        "cost_usd": {
+          "maximum": 1000,
+          "minimum": 0,
+          "title": "Cost Usd",
+          "type": "number"
+        },
+        "external_execution_performed": {
+          "const": false,
+          "default": false,
+          "title": "External Execution Performed",
+          "type": "boolean"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/AIFieldPrediction"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "latency_ms": {
+          "maximum": 600000,
+          "minimum": 0,
+          "title": "Latency Ms",
+          "type": "integer"
+        },
+        "overall_confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Overall Confidence",
+          "type": "number"
+        },
+        "provider_response_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Provider Response Sha256",
+          "type": "string"
+        },
+        "request_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Request Sha256",
+          "type": "string"
+        },
+        "requires_human_review": {
+          "const": true,
+          "default": true,
+          "title": "Requires Human Review",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "0.3.0",
+          "default": "0.3.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 20,
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "request_sha256",
+        "adapter",
+        "fields",
+        "overall_confidence",
+        "latency_ms",
+        "cost_usd",
+        "provider_response_sha256"
+      ],
+      "title": "AIExtractionArtifact",
+      "type": "object"
+    },
+    "AIFieldPrediction": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence_pages": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 200,
+          "minItems": 1,
+          "title": "Evidence Pages",
+          "type": "array"
+        },
+        "evidence_text_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Evidence Text Sha256",
+          "type": "string"
+        },
+        "field_name": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Field Name",
+          "type": "string"
+        },
+        "value": {
+          "maxLength": 5000,
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "field_name",
+        "value",
+        "confidence",
+        "evidence_pages",
+        "evidence_text_sha256"
+      ],
+      "title": "AIFieldPrediction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "adapter_invoked": {
+      "title": "Adapter Invoked",
+      "type": "boolean"
+    },
+    "ai_artifact": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AIExtractionArtifact"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "automation_authority": {
+      "const": false,
+      "default": false,
+      "title": "Automation Authority",
+      "type": "boolean"
+    },
+    "operational_side_effects_performed": {
+      "const": false,
+      "default": false,
+      "title": "Operational Side Effects Performed",
+      "type": "boolean"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Reasons",
+      "type": "array"
+    },
+    "requires_human_review": {
+      "const": true,
+      "default": true,
+      "title": "Requires Human Review",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "0.3.0",
+      "default": "0.3.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "selected_artifact_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Selected Artifact Sha256",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "ai_selected",
+        "deterministic_fallback"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "selected_artifact_sha256",
+    "reasons",
+    "adapter_invoked"
+  ],
+  "title": "AIResolution",
+  "type": "object"
+}

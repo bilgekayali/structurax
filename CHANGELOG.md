@@ -2,6 +2,32 @@
 
 All notable changes to StructuraX are documented here.
 
+## [0.3.0] - 2026-08-21
+
+### Added
+
+- Provider-neutral, fail-closed AI extraction adapter contract bound to exact source and
+  v0.2 ingestion provenance.
+- Offline recorded-response adapter with no live model, network, tool, subprocess or
+  filesystem-write execution in the built-in path.
+- Pre-invocation untrusted-instruction detection that prevents adapter invocation and
+  selects a deterministic fallback artifact.
+- Confidence-based abstention for low overall confidence, low required-field confidence
+  and missing required fields.
+- Machine contracts that preserve human review, prohibit automation authority and record
+  zero operational side effects.
+- Synthetic two-adapter comparison covering exact field accuracy, evidence fidelity,
+  recorded latency, recorded cost, invocation count and fallback count.
+- New CLI commands, JSON Schemas, reproducible synthetic AI fixtures, evaluation report,
+  v0.3 tests and AI-boundary documentation.
+
+### Security boundary
+
+- v0.3 does not ship a credentialed live AI provider integration and does not claim that
+  lexical prompt-injection indicators are an exhaustive injection defense.
+- AI-selected outputs remain review evidence only; they do not approve, pay, mutate ERP
+  state or establish document authenticity, legal truth or engineering correctness.
+
 ## [0.2.0] - 2026-08-20
 
 ### Added

@@ -1,0 +1,161 @@
+{
+  "$defs": {
+    "AIAdapterBenchmarkMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "title": "Adapter Id",
+          "type": "string"
+        },
+        "average_cost_usd": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Average Cost Usd"
+        },
+        "average_latency_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Average Latency Ms"
+        },
+        "case_count": {
+          "minimum": 1,
+          "title": "Case Count",
+          "type": "integer"
+        },
+        "evidence_fidelity": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Fidelity"
+        },
+        "evidence_match_count": {
+          "minimum": 0,
+          "title": "Evidence Match Count",
+          "type": "integer"
+        },
+        "exact_field_accuracy": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exact Field Accuracy"
+        },
+        "exact_field_match_count": {
+          "minimum": 0,
+          "title": "Exact Field Match Count",
+          "type": "integer"
+        },
+        "expected_field_count": {
+          "minimum": 0,
+          "title": "Expected Field Count",
+          "type": "integer"
+        },
+        "fallback_count": {
+          "minimum": 0,
+          "title": "Fallback Count",
+          "type": "integer"
+        },
+        "invocation_count": {
+          "minimum": 0,
+          "title": "Invocation Count",
+          "type": "integer"
+        },
+        "model_label": {
+          "title": "Model Label",
+          "type": "string"
+        },
+        "provider_label": {
+          "title": "Provider Label",
+          "type": "string"
+        },
+        "total_cost_usd": {
+          "minimum": 0,
+          "title": "Total Cost Usd",
+          "type": "number"
+        }
+      },
+      "required": [
+        "adapter_id",
+        "provider_label",
+        "model_label",
+        "case_count",
+        "invocation_count",
+        "fallback_count",
+        "expected_field_count",
+        "exact_field_match_count",
+        "evidence_match_count",
+        "total_cost_usd"
+      ],
+      "title": "AIAdapterBenchmarkMetric",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "live_model_calls_performed": {
+      "const": false,
+      "default": false,
+      "title": "Live Model Calls Performed",
+      "type": "boolean"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/AIAdapterBenchmarkMetric"
+      },
+      "minItems": 1,
+      "title": "Metrics",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.3.0",
+      "default": "0.3.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "metrics",
+    "limitations"
+  ],
+  "title": "AIAdapterBenchmarkReport",
+  "type": "object"
+}

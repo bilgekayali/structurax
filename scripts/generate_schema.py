@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from structurax.ai_adapters import AIExtractionRequest, AIResolution, AITrustPolicy, RecordedAIResponseCatalog
+from structurax.ai_evaluation import AIBenchmarkSuite, AIAdapterBenchmarkReport
 from structurax.evaluation import RuleEvaluationReport
 from structurax.explanations import ReviewerExplanation
 from structurax.feedback import HumanReviewFeedback
@@ -14,10 +16,16 @@ from structurax.models import DocumentPack
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = {
+    "ai-adapter-benchmark-report.schema.json": AIAdapterBenchmarkReport,
+    "ai-benchmark-suite.schema.json": AIBenchmarkSuite,
+    "ai-extraction-request.schema.json": AIExtractionRequest,
+    "ai-resolution.schema.json": AIResolution,
+    "ai-trust-policy.schema.json": AITrustPolicy,
     "document-pack.schema.json": DocumentPack,
     "fixture-manifest.schema.json": FixtureManifest,
     "human-review-feedback.schema.json": HumanReviewFeedback,
     "ingestion-artifact.schema.json": IngestionArtifact,
+    "recorded-ai-response-catalog.schema.json": RecordedAIResponseCatalog,
     "recorded-extraction-catalog.schema.json": RecordedExtractionCatalog,
     "reviewer-explanation.schema.json": ReviewerExplanation,
     "rule-evaluation-report.schema.json": RuleEvaluationReport,
@@ -30,13 +38,7 @@ def main() -> None:
     for filename, model in SCHEMAS.items():
         target = target_dir / filename
         target.write_text(
-            json.dumps(
-                model.model_json_schema(),
-                ensure_ascii=False,
-                indent=2,
-                sort_keys=True,
-            )
-            + "\n",
+            json.dumps(model.model_json_schema(), ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
         print(f"Wrote {target.relative_to(ROOT)}")

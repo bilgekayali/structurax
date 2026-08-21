@@ -1,0 +1,71 @@
+{
+  "$defs": {
+    "AIPageInput": {
+      "additionalProperties": false,
+      "properties": {
+        "page_number": {
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Page Number",
+          "type": "integer"
+        },
+        "text": {
+          "maxLength": 10000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "page_number",
+        "text"
+      ],
+      "title": "AIPageInput",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ingestion_extraction_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Ingestion Extraction Sha256",
+      "type": "string"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/AIPageInput"
+      },
+      "maxItems": 200,
+      "minItems": 1,
+      "title": "Pages",
+      "type": "array"
+    },
+    "requested_fields": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Requested Fields",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.3.0",
+      "default": "0.3.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_sha256",
+    "ingestion_extraction_sha256",
+    "pages",
+    "requested_fields"
+  ],
+  "title": "AIExtractionRequest",
+  "type": "object"
+}
