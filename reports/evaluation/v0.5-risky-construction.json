@@ -1,0 +1,147 @@
+{
+  "automation_authority": false,
+  "case_id": "risky-construction-case",
+  "cost_summary": {
+    "authorized_contract_total": "132000.00",
+    "authorized_vs_budget_percent": "32.00",
+    "boq_budget_total": "100000.00",
+    "invoiced_total": "162000.00",
+    "invoiced_vs_budget_percent": "62.00"
+  },
+  "engine_version": "0.5.0",
+  "findings": [
+    {
+      "description": "INV-001 uses a unit rate not supported by the contract or latest approved variation.",
+      "evidence": [
+        {
+          "artifact_id": "INV-001",
+          "expected": "1100.00",
+          "field": "unit_rate",
+          "observed": "1350.00"
+        },
+        {
+          "artifact_id": "VO-001",
+          "expected": null,
+          "field": "authorized_unit_rate",
+          "observed": "1100.00"
+        }
+      ],
+      "recommendation": "Hold the line and verify the governing contract or approved variation order.",
+      "requires_human_review": true,
+      "rule_id": "UNIT_RATE_EXCEEDS_AUTHORIZED",
+      "severity": "critical",
+      "title": "Invoice unit rate is outside authorized contract tolerance"
+    },
+    {
+      "description": "Contract plus approved variation authority exceeds the configured project budget variance threshold.",
+      "evidence": [
+        {
+          "artifact_id": "BOQ-001",
+          "expected": "100000.00",
+          "field": "project_authorized_vs_boq",
+          "observed": "132000.00"
+        }
+      ],
+      "recommendation": "Escalate to commercial/project controls for forecast and approved-budget reconciliation.",
+      "requires_human_review": true,
+      "rule_id": "PROJECT_AUTHORIZED_COST_OVERRUN",
+      "severity": "high",
+      "title": "Authorized contract cost exceeds BOQ budget threshold"
+    },
+    {
+      "description": "Cumulative invoice quantity for C30 exceeds or lacks delivery evidence.",
+      "evidence": [
+        {
+          "artifact_id": "INV-001",
+          "expected": "90.000",
+          "field": "quantity.cumulative_invoiced",
+          "observed": "120.000"
+        }
+      ],
+      "recommendation": "Verify receipt with site records and hold the unmatched quantity.",
+      "requires_human_review": true,
+      "rule_id": "THREE_WAY_DELIVERY_MISMATCH",
+      "severity": "high",
+      "title": "Invoice quantity does not reconcile to recorded delivery"
+    },
+    {
+      "description": "Cumulative invoice quantity for C30 exceeds or lacks purchase-order quantity.",
+      "evidence": [
+        {
+          "artifact_id": "INV-001",
+          "expected": "110.000",
+          "field": "quantity.cumulative_invoiced",
+          "observed": "120.000"
+        }
+      ],
+      "recommendation": "Reconcile invoice quantity to an authorized purchase order before payment review.",
+      "requires_human_review": true,
+      "rule_id": "THREE_WAY_PO_MISMATCH",
+      "severity": "high",
+      "title": "Invoice quantity does not reconcile to purchase orders"
+    },
+    {
+      "description": "Approved contract/variation scope for C30 exceeds the BOQ baseline.",
+      "evidence": [
+        {
+          "artifact_id": "VO-001",
+          "expected": "100.000",
+          "field": "authorized_quantity",
+          "observed": "120.000"
+        },
+        {
+          "artifact_id": "BOQ-001",
+          "expected": null,
+          "field": "budget_quantity",
+          "observed": "100.000"
+        }
+      ],
+      "recommendation": "Review the approved scope change against budget, forecast, and change-control evidence.",
+      "requires_human_review": true,
+      "rule_id": "BOQ_QUANTITY_VARIANCE",
+      "severity": "medium",
+      "title": "Authorized contract quantity exceeds BOQ quantity"
+    },
+    {
+      "description": "INV-001 is outside the configured supplier price-history threshold for C30.",
+      "evidence": [
+        {
+          "artifact_id": "INV-001",
+          "expected": "1000.00",
+          "field": "unit_rate",
+          "observed": "1350.00"
+        }
+      ],
+      "recommendation": "Review supplier price history and commercial justification; this signal is not proof of fraud or overcharging.",
+      "requires_human_review": true,
+      "rule_id": "SUPPLIER_UNIT_RATE_ANOMALY",
+      "severity": "medium",
+      "title": "Supplier unit rate deviates from deterministic historical median"
+    }
+  ],
+  "input_sha256": "639afbb8b204cdde83102ed9d558e509c170b69381ddd99429e0011c97bac525",
+  "lineage_summary": {
+    "cycle_detected": false,
+    "edge_count": 5,
+    "invoice_nodes_without_contract_path": [],
+    "node_count": 6
+  },
+  "matches": [
+    {
+      "authorized_quantity_ok": true,
+      "authorized_rate_ok": false,
+      "delivery_quantity_ok": false,
+      "four_way_complete": true,
+      "invoice_artifact_id": "INV-001",
+      "item_code": "C30",
+      "po_quantity_ok": false,
+      "status": "block",
+      "supplier_id": "SUP-001",
+      "three_way_complete": true
+    }
+  ],
+  "operational_side_effects_performed": false,
+  "project_id": "PRJ-001",
+  "requires_human_review": true,
+  "schema_version": "0.5.0"
+}
