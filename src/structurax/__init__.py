@@ -7,7 +7,7 @@ from structurax.evaluation import evaluate_rule_families
 from structurax.ingestion import ingest_pdf_bytes, ingest_pdf_path
 from structurax.models import AnalysisReport, DocumentPack, Policy
 from structurax.pilot import assess_pilot_readiness
-from structurax.review_workflow import verify_audit_chain
+from structurax.review_workflow import verify_audit_chain, verify_audit_history
 
 __all__ = [
     "AnalysisReport",
@@ -22,5 +22,6 @@ __all__ = [
     "resolve_ai_extraction",
     "run_ai_extraction",
     "verify_audit_chain",
+    "verify_audit_history",
 ]
 __version__ = "0.4.0"
