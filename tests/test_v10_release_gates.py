@@ -18,11 +18,19 @@ class V10ReleaseGateTests(unittest.TestCase):
         )
         return json.loads(result.stdout)
 
-    def test_schema_contract_gate_passes_but_is_not_final_freeze(self):
+    def test_schema_contract_gate_is_exact_final_release_candidate_freeze(self):
         payload = self.run_json("scripts/verify_stable_schemas.py")
         self.assertTrue(payload["compatible"])
-        self.assertGreaterEqual(payload["schema_count"], 20)
-        self.assertFalse(payload["final_v1_freeze"])
+        self.assertEqual(payload["schema_count"], 23)
+        self.assertTrue(payload["final_v1_freeze"])
+        self.assertEqual(payload["status"], "frozen-release-candidate")
+        self.assertFalse(payload["production_readiness_claimed"])
+
+    def test_api_contract_gate_is_exact_final_release_candidate_freeze(self):
+        payload = self.run_json("scripts/verify_stable_api.py")
+        self.assertTrue(payload["compatible"])
+        self.assertTrue(payload["final_v1_freeze"])
+        self.assertEqual(payload["status"], "frozen-release-candidate")
         self.assertFalse(payload["production_readiness_claimed"])
 
     def test_dependency_closure_sbom_is_deterministic(self):
@@ -53,6 +61,8 @@ class V10ReleaseGateTests(unittest.TestCase):
         payload = self.run_json("scripts/assess_release_gate.py")
         self.assertFalse(payload["eligible"])
         self.assertFalse(payload["formal_release_declared"])
+        self.assertNotIn("stable_api_contract_frozen", payload["blockers"])
+        self.assertNotIn("stable_schema_contract_frozen", payload["blockers"])
         self.assertIn("independent_security_review_verified", payload["blockers"])
         self.assertIn("build_provenance_attested", payload["blockers"])
         self.assertIn("package_version_not_1_0_0", payload["blockers"])
