@@ -71,6 +71,12 @@ content identities. Security, encryption, PostgreSQL, identity, observability an
 reference controls are executable and fail closed, but reference validation is not a claim that
 a production environment enforces those controls.
 
+Release-candidate supply-chain preparation now binds the wheel, dependency SBOM, source
+provenance and release-gate output into a deterministic SHA-256 evidence manifest before any
+manual GitHub attestation step. This is preparation only: the SBOM/provenance milestone remains
+open until release evidence is attached and attested for the exact accepted candidate and the
+repository-level CodeQL/release governance controls are actually enforced.
+
 The roadmap is directional, not a release commitment. Production use requires a separate
 risk assessment, governance model, security architecture, legal/privacy assessment, and
 validation against the actual organization, document types, contracts, models, providers
