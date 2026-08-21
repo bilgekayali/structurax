@@ -1,0 +1,73 @@
+{
+  "access_control": {
+    "break_glass_review_required": true,
+    "default_deny": true,
+    "mfa_required_for_humans": true,
+    "schema_version": "0.4.0",
+    "service_accounts_no_human_login": true,
+    "tenant_boundary_required": true
+  },
+  "automated_approval_permitted": false,
+  "data_handling": {
+    "classification": "pilot_restricted",
+    "deletion_requires_authorized_human": true,
+    "least_privilege_required": true,
+    "raw_document_text_in_audit": false,
+    "retention_days": 90,
+    "schema_version": "0.4.0",
+    "secrets_in_evidence": false
+  },
+  "deployment_performed": false,
+  "human_checkpoints": [
+    {
+      "checkpoint_id": "business_owner_approval",
+      "evidence_kind": "synthetic_reference",
+      "evidence_sha256": "ac74ea03428f69fbfbaa900f2b28d99e9a1b7d8cac57e8f5be79a177988e5f2e",
+      "owner_id": "synthetic-business_owner_approval-owner",
+      "satisfied": true
+    },
+    {
+      "checkpoint_id": "privacy_review",
+      "evidence_kind": "synthetic_reference",
+      "evidence_sha256": "fc534d138853dfde4f2e0811ce29ad40e6fb1df0fa985f16f0f858df4a146823",
+      "owner_id": "synthetic-privacy_review-owner",
+      "satisfied": true
+    },
+    {
+      "checkpoint_id": "security_review",
+      "evidence_kind": "synthetic_reference",
+      "evidence_sha256": "a3d074d6e02489b4d02b62c7f4a24f7a6bb6f086cf00d46dd6d876fbdd816c77",
+      "owner_id": "synthetic-security_review-owner",
+      "satisfied": true
+    },
+    {
+      "checkpoint_id": "workflow_owner_approval",
+      "evidence_kind": "synthetic_reference",
+      "evidence_sha256": "dc7f512979b3284535630109ae7d35371d67d0e881a282d0ebf560beeb041990",
+      "owner_id": "synthetic-workflow_owner_approval-owner",
+      "satisfied": true
+    }
+  ],
+  "incident_response": {
+    "ai_control_failure_process_defined": true,
+    "automatic_external_notification_permitted": false,
+    "human_notification_required": true,
+    "incident_owner_id": "synthetic-security-owner",
+    "privacy_incident_process_defined": true,
+    "schema_version": "0.4.0",
+    "security_incident_process_defined": true
+  },
+  "live_model_calls_permitted": false,
+  "plan_id": "synthetic-controlled-pilot",
+  "reference_only": true,
+  "rollback": {
+    "automatic_rollback_without_human": false,
+    "backup_required": true,
+    "max_recovery_minutes": 30,
+    "rollback_owner_id": "synthetic-release-owner",
+    "rollback_test_evidence_sha256": "2b3e3f168619a71dec11e319698d60537c8c38142b693515ec6507741e1e3bba",
+    "schema_version": "0.4.0"
+  },
+  "schema_version": "0.4.0",
+  "workflow_policy_sha256": "559e7b332970b3e6b85fdaa2750583e449e91b3540b7aa562493ef44c75fedc3"
+}

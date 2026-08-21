@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "ReviewRole": {
+      "enum": [
+        "requester",
+        "reviewer",
+        "approver",
+        "security",
+        "privacy",
+        "release_manager"
+      ],
+      "title": "ReviewRole",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allow_self_approval": {
+      "const": false,
+      "default": false,
+      "title": "Allow Self Approval",
+      "type": "boolean"
+    },
+    "approval_owner_ids": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 50,
+      "title": "Approval Owner Ids",
+      "type": "array"
+    },
+    "approved_by": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Approved By",
+      "type": "string"
+    },
+    "authored_by": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Authored By",
+      "type": "string"
+    },
+    "change_ticket_id": {
+      "maxLength": 120,
+      "minLength": 3,
+      "title": "Change Ticket Id",
+      "type": "string"
+    },
+    "default_deny": {
+      "const": true,
+      "default": true,
+      "title": "Default Deny",
+      "type": "boolean"
+    },
+    "effective_at": {
+      "format": "date-time",
+      "title": "Effective At",
+      "type": "string"
+    },
+    "maker_checker_required": {
+      "const": true,
+      "default": true,
+      "title": "Maker Checker Required",
+      "type": "boolean"
+    },
+    "policy_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "required_approval_roles": {
+      "items": {
+        "$ref": "#/$defs/ReviewRole"
+      },
+      "title": "Required Approval Roles",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "supersedes_policy_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Supersedes Policy Sha256"
+    }
+  },
+  "required": [
+    "policy_id",
+    "policy_version",
+    "authored_by",
+    "approved_by",
+    "change_ticket_id",
+    "effective_at"
+  ],
+  "title": "WorkflowPolicy",
+  "type": "object"
+}

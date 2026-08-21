@@ -1,0 +1,44 @@
+{
+  "exercise_id": "structurax-v0.4-synthetic-red-team",
+  "performed_at": "2026-08-21T09:00:00Z",
+  "scenarios": [
+    {
+      "expected_control": "tampered audit event rejected",
+      "observed_control": "tampered audit event rejected",
+      "passed": true,
+      "scenario_id": "audit-chain-tampering"
+    },
+    {
+      "expected_control": "rehashed history cannot bypass RBAC and approval ownership",
+      "observed_control": "rehash structurally valid but semantic replay rejected",
+      "passed": true,
+      "scenario_id": "audit-semantic-replay-bypass"
+    },
+    {
+      "expected_control": "missing independent review blocks pilot eligibility",
+      "observed_control": "pilot eligibility blocked",
+      "passed": true,
+      "scenario_id": "independent-review-gate"
+    },
+    {
+      "expected_control": "case creator cannot approve",
+      "observed_control": "self approval blocked",
+      "passed": true,
+      "scenario_id": "maker-checker-self-approval"
+    },
+    {
+      "expected_control": "replacement must bind exact predecessor policy digest",
+      "observed_control": "stale policy substitution rejected",
+      "passed": true,
+      "scenario_id": "policy-substitution"
+    },
+    {
+      "expected_control": "non-owner approver rejected",
+      "observed_control": "non-owner approver rejected",
+      "passed": true,
+      "scenario_id": "unauthorized-approval-owner"
+    }
+  ],
+  "schema_version": "0.4.0",
+  "synthetic_only": true
+}

@@ -1,0 +1,11 @@
+{
+  "automation_authority": false,
+  "case_id": "PILOT-CASE-001",
+  "created_at": "2026-08-21T08:00:00Z",
+  "created_by": "synthetic-maker",
+  "data_classification": "synthetic",
+  "policy_sha256": "559e7b332970b3e6b85fdaa2750583e449e91b3540b7aa562493ef44c75fedc3",
+  "requires_human_review": true,
+  "schema_version": "0.4.0",
+  "subject_artifact_sha256": "9873dab92d6c1e387359cf4f5dbb93c1809f42627165e46b607072cfba2f41c3"
+}

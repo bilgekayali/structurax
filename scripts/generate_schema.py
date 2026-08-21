@@ -13,6 +13,13 @@ from structurax.feedback import HumanReviewFeedback
 from structurax.fixture_signing import FixtureManifest
 from structurax.ingestion import IngestionArtifact, RecordedExtractionCatalog
 from structurax.models import DocumentPack
+from structurax.pilot import (
+    IndependentSecurityReview,
+    PilotDeploymentPlan,
+    PilotReadinessAssessment,
+    RedTeamReport,
+)
+from structurax.review_workflow import AuditEvent, ReviewCase, WorkflowPolicy
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = {
@@ -21,14 +28,21 @@ SCHEMAS = {
     "ai-extraction-request.schema.json": AIExtractionRequest,
     "ai-resolution.schema.json": AIResolution,
     "ai-trust-policy.schema.json": AITrustPolicy,
+    "audit-event.schema.json": AuditEvent,
     "document-pack.schema.json": DocumentPack,
     "fixture-manifest.schema.json": FixtureManifest,
     "human-review-feedback.schema.json": HumanReviewFeedback,
+    "independent-security-review.schema.json": IndependentSecurityReview,
     "ingestion-artifact.schema.json": IngestionArtifact,
+    "pilot-deployment-plan.schema.json": PilotDeploymentPlan,
+    "pilot-readiness-assessment.schema.json": PilotReadinessAssessment,
     "recorded-ai-response-catalog.schema.json": RecordedAIResponseCatalog,
     "recorded-extraction-catalog.schema.json": RecordedExtractionCatalog,
+    "red-team-report.schema.json": RedTeamReport,
+    "review-case.schema.json": ReviewCase,
     "reviewer-explanation.schema.json": ReviewerExplanation,
     "rule-evaluation-report.schema.json": RuleEvaluationReport,
+    "workflow-policy.schema.json": WorkflowPolicy,
 }
 
 

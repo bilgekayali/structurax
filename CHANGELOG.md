@@ -2,50 +2,49 @@
 
 All notable changes to StructuraX are documented here.
 
+## [0.4.0] - 2026-08-21
+
+### Added
+
+- Role-based human review workflow with maker-checker separation and explicit approval ownership.
+- Tamper-evident, hash-linked audit-event evidence bound to exact review-case and policy digests.
+- Semantic audit-history replay that revalidates RBAC, maker-checker and approval-owner rules even when an attacker recomputes event hashes.
+- Policy versioning and change-governance contract requiring separate author/approver humans and exact predecessor binding.
+- Reference-only data handling, default-deny access, incident response, human checkpoint and rollback contracts.
+- Deterministic synthetic workflow fixtures and v0.4 red-team scenarios for audit tampering, rehashed unauthorized history, self-approval, approval-owner bypass, policy substitution and missing independent review.
+- Fail-closed pilot-readiness assessment that cannot become eligible without a genuine independent review bound to the expected repository digest.
+- Deterministic Git-tracked repository review-digest utility and independent security review schema/handoff guidance.
+- Seven new v0.4 JSON Schemas, pilot governance/security/deployment documentation and CI coverage.
+
+### Security boundary
+
+- The hash-linked audit chain is tamper-evident evidence, not proof of immutable/WORM storage; production immutability requires separately enforced append-only storage and IAM controls.
+- v0.4 remains reference-only: no live model/OCR call, deployment, autonomous approval, payment, ERP mutation or external notification is performed.
+- The implementation milestone does not fabricate independent review evidence. The committed pilot-readiness report remains ineligible until a real independent review exists.
+
 ## [0.3.0] - 2026-08-21
 
 ### Added
 
-- Provider-neutral, fail-closed AI extraction adapter contract bound to exact source and
-  v0.2 ingestion provenance.
-- Offline recorded-response adapter with no live model, network, tool, subprocess or
-  filesystem-write execution in the built-in path.
-- Pre-invocation untrusted-instruction detection that prevents adapter invocation and
-  selects a deterministic fallback artifact.
-- Confidence-based abstention for low overall confidence, low required-field confidence
-  and missing required fields.
-- Machine contracts that preserve human review, prohibit automation authority and record
-  zero operational side effects.
-- Synthetic two-adapter comparison covering exact field accuracy, evidence fidelity,
-  recorded latency, recorded cost, invocation count and fallback count.
-- New CLI commands, JSON Schemas, reproducible synthetic AI fixtures, evaluation report,
-  v0.3 tests and AI-boundary documentation.
+- Provider-neutral, fail-closed AI extraction adapter contract bound to exact source and v0.2 ingestion provenance.
+- Offline recorded-response adapter with no live model, network, tool, subprocess or filesystem-write execution in the built-in path.
+- Pre-invocation untrusted-instruction detection, confidence abstention and deterministic fallback.
+- Cited-page evidence digest and canonical provider-response digest verification.
+- Synthetic two-adapter comparison covering field accuracy, evidence fidelity, recorded latency and cost.
 
 ### Security boundary
 
-- v0.3 does not ship a credentialed live AI provider integration and does not claim that
-  lexical prompt-injection indicators are an exhaustive injection defense.
-- AI-selected outputs remain review evidence only; they do not approve, pay, mutate ERP
-  state or establish document authenticity, legal truth or engineering correctness.
+- v0.3 does not ship a credentialed live AI provider integration or autonomous action authority.
 
 ## [0.2.0] - 2026-08-20
 
 ### Added
 
-- Fail-closed PDF preflight and a closed ingestion-adapter contract with exact source,
-  adapter and extraction provenance.
+- Fail-closed PDF preflight and a closed ingestion-adapter contract with exact source, adapter and extraction provenance.
 - Network-free, digest-bound recorded extraction adapter for synthetic PDF fixtures.
 - Adversarial/truncated PDF boundary fixtures protected by an Ed25519-signed manifest.
-- Deterministic English and Turkish reviewer explanations for all current rule IDs.
-- Rule-family false-positive/false-negative, precision and recall regression evidence.
-- Side-effect-free human-review feedback contract and stable feedback digest.
-- Six v0.2 JSON Schemas, fixture data-lineage documentation and expanded CI across Python
-  3.11, 3.12 and 3.13.
-
-### Security boundary
-
-- v0.2 does not perform live OCR/model calls and does not claim kernel/container sandbox
-  enforcement. Real parser/OCR workers remain a future separately isolated boundary.
+- Deterministic English and Turkish reviewer explanations and rule-family regression evidence.
+- Side-effect-free human-review feedback contract.
 
 ## [0.1.0] - 2026-08-05
 
@@ -57,4 +56,3 @@ All notable changes to StructuraX are documented here.
 - Command-line validation and analysis with JSON and Markdown reports.
 - Clean and deliberately risky synthetic reference scenarios.
 - Credential-free Gradio and Docker demo paths.
-- Generated JSON Schema, reference reports, unit tests, CI, architecture notes, and threat model.

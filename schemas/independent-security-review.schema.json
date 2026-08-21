@@ -1,0 +1,46 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "completed_at": {
+      "format": "date-time",
+      "title": "Completed At",
+      "type": "string"
+    },
+    "review_evidence_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Review Evidence Sha256",
+      "type": "string"
+    },
+    "reviewed_repository_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Reviewed Repository Sha256",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "maxLength": 160,
+      "minLength": 3,
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "reviewer_independence_confirmed": {
+      "const": true,
+      "default": true,
+      "title": "Reviewer Independence Confirmed",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "reviewed_repository_sha256",
+    "reviewer_id",
+    "review_evidence_sha256",
+    "completed_at"
+  ],
+  "title": "IndependentSecurityReview",
+  "type": "object"
+}

@@ -1,0 +1,59 @@
+[
+  {
+    "action": "submit",
+    "actor": {
+      "actor_id": "synthetic-maker",
+      "roles": [
+        "requester"
+      ]
+    },
+    "case_id": "PILOT-CASE-001",
+    "event_sha256": "d99290e4cf3e421eaac8fe4a4f9c47600a3da07acd2afce1c357aad6330d6f98",
+    "occurred_at": "2026-08-21T08:01:00Z",
+    "operational_side_effects_performed": false,
+    "payload_sha256": "dd89c42a428a3d8ea4299adfaaa3b3fb3ef656dc6e0fd4bacc649bbc76914a67",
+    "policy_sha256": "559e7b332970b3e6b85fdaa2750583e449e91b3540b7aa562493ef44c75fedc3",
+    "prior_event_sha256": null,
+    "raw_document_content_recorded": false,
+    "schema_version": "0.4.0",
+    "sequence": 1
+  },
+  {
+    "action": "start_review",
+    "actor": {
+      "actor_id": "synthetic-reviewer",
+      "roles": [
+        "reviewer"
+      ]
+    },
+    "case_id": "PILOT-CASE-001",
+    "event_sha256": "379f691e8efa507db127b8fa9c87eb4d526858a804bc70d39bd449dd0ff6977f",
+    "occurred_at": "2026-08-21T08:02:00Z",
+    "operational_side_effects_performed": false,
+    "payload_sha256": "03c1fe478d903994c768bc49d0d1b7b02ef422d6ac6813d0620f8f5ee9a85385",
+    "policy_sha256": "559e7b332970b3e6b85fdaa2750583e449e91b3540b7aa562493ef44c75fedc3",
+    "prior_event_sha256": "d99290e4cf3e421eaac8fe4a4f9c47600a3da07acd2afce1c357aad6330d6f98",
+    "raw_document_content_recorded": false,
+    "schema_version": "0.4.0",
+    "sequence": 2
+  },
+  {
+    "action": "approve",
+    "actor": {
+      "actor_id": "synthetic-approver",
+      "roles": [
+        "approver"
+      ]
+    },
+    "case_id": "PILOT-CASE-001",
+    "event_sha256": "e60aac0861492ab542e69c239a8d390eb797c0d40727b28e98099f29e1add21f",
+    "occurred_at": "2026-08-21T08:03:00Z",
+    "operational_side_effects_performed": false,
+    "payload_sha256": "a8593a62142cee1fec9b59ea9fc5beb82271ae1b7a1f467b2931c44561b1a81f",
+    "policy_sha256": "559e7b332970b3e6b85fdaa2750583e449e91b3540b7aa562493ef44c75fedc3",
+    "prior_event_sha256": "379f691e8efa507db127b8fa9c87eb4d526858a804bc70d39bd449dd0ff6977f",
+    "raw_document_content_recorded": false,
+    "schema_version": "0.4.0",
+    "sequence": 3
+  }
+]
