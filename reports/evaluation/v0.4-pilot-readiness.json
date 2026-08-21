@@ -1,0 +1,14 @@
+{
+  "all_human_checkpoints_satisfied": true,
+  "automated_action_authority": false,
+  "deployment_performed": false,
+  "eligible": false,
+  "independent_security_review_present": false,
+  "plan_id": "synthetic-controlled-pilot",
+  "reasons": [
+    "independent_security_review_missing"
+  ],
+  "red_team_passed": true,
+  "reference_only": true,
+  "schema_version": "0.4.0"
+}
