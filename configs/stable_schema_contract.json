@@ -1,0 +1,20 @@
+{
+  "contract_version": "1.0-prep",
+  "status": "draft-pre-release",
+  "minimum_schema_count": 20,
+  "required_schema_files": [
+    "schemas/document-pack.schema.json",
+    "schemas/ingestion-artifact.schema.json",
+    "schemas/ai-extraction-request.schema.json",
+    "schemas/ai-resolution.schema.json",
+    "schemas/review-case.schema.json",
+    "schemas/audit-event.schema.json",
+    "schemas/independent-security-review.schema.json",
+    "schemas/construction-intelligence-case.schema.json",
+    "schemas/construction-intelligence-report.schema.json"
+  ],
+  "required_top_level_keys": ["title", "type"],
+  "required_root_type": "object",
+  "production_readiness_claimed": false,
+  "compatibility_note": "This preparation gate validates the committed schema surface and critical files. It is not yet the final v1.0 backward-compatibility freeze."
+}

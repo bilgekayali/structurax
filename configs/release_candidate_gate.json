@@ -1,0 +1,18 @@
+{
+  "gate_version": "1.0-prep",
+  "formal_release_eligible": false,
+  "required_release_version": "1.0.0",
+  "checks": {
+    "stable_api_contract_frozen": false,
+    "stable_schema_contract_frozen": false,
+    "postgresql_tenant_isolation_validated": false,
+    "external_identity_boundary_validated": false,
+    "evidence_encryption_and_key_management_validated": false,
+    "observability_and_deployment_controls_validated": false,
+    "complete_release_sbom_attached": false,
+    "build_provenance_attested": false,
+    "codeql_release_gate_enforced": false,
+    "independent_security_review_verified": false
+  },
+  "production_readiness_claimed": false
+}
