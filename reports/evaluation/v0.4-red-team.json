@@ -9,6 +9,12 @@
       "scenario_id": "audit-chain-tampering"
     },
     {
+      "expected_control": "rehashed history cannot bypass RBAC and approval ownership",
+      "observed_control": "rehash structurally valid but semantic replay rejected",
+      "passed": true,
+      "scenario_id": "audit-semantic-replay-bypass"
+    },
+    {
       "expected_control": "missing independent review blocks pilot eligibility",
       "observed_control": "pilot eligibility blocked",
       "passed": true,
