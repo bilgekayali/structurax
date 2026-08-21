@@ -1,4 +1,4 @@
-"""Fail-closed v0.4 human review workflow and immutable audit-chain contracts."""
+"""Fail-closed v0.4 human review workflow with tamper-evident audit contracts."""
 from __future__ import annotations
 
 import hashlib
@@ -15,7 +15,13 @@ WORKFLOW_SCHEMA_VERSION = "0.4.0"
 
 
 def canonical_digest(payload: object) -> str:
-    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
+    raw = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    ).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
 
 
@@ -67,8 +73,13 @@ class WorkflowPolicy(StrictModel):
     approved_by: str = Field(min_length=3, max_length=120)
     change_ticket_id: str = Field(min_length=3, max_length=120)
     effective_at: datetime
-    supersedes_policy_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
-    required_approval_roles: list[ReviewRole] = Field(default_factory=lambda: [ReviewRole.APPROVER])
+    supersedes_policy_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[a-f0-9]{64}$",
+    )
+    required_approval_roles: list[ReviewRole] = Field(
+        default_factory=lambda: [ReviewRole.APPROVER]
+    )
     approval_owner_ids: list[str] = Field(default_factory=list, max_length=50)
     maker_checker_required: Literal[True] = True
     allow_self_approval: Literal[False] = False
@@ -90,7 +101,10 @@ def policy_digest(policy: WorkflowPolicy) -> str:
     return canonical_digest(policy.model_dump(mode="json"))
 
 
-def validate_policy_replacement(current: WorkflowPolicy, replacement: WorkflowPolicy) -> None:
+def validate_policy_replacement(
+    current: WorkflowPolicy,
+    replacement: WorkflowPolicy,
+) -> None:
     if replacement.policy_id != current.policy_id:
         raise ValueError("replacement policy_id must match current policy_id")
     if replacement.policy_version == current.policy_version:
@@ -121,7 +135,10 @@ class AuditEvent(StrictModel):
     actor: ActorIdentity
     policy_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     occurred_at: datetime
-    prior_event_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    prior_event_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[a-f0-9]{64}$",
+    )
     payload_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     event_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     raw_document_content_recorded: Literal[False] = False
@@ -135,7 +152,10 @@ def event_digest(event: AuditEvent) -> str:
 
 
 def verify_audit_chain(case: ReviewCase, events: list[AuditEvent]) -> None:
+    """Verify hash linkage, exact bindings, sequence, and monotonic event chronology."""
+
     previous: str | None = None
+    previous_time = case.created_at
     for index, event in enumerate(events, start=1):
         if event.case_id != case.case_id:
             raise ValueError("audit event case_id does not match review case")
@@ -143,29 +163,44 @@ def verify_audit_chain(case: ReviewCase, events: list[AuditEvent]) -> None:
             raise ValueError("audit event policy digest does not match review case")
         if event.sequence != index:
             raise ValueError("audit event sequence must be contiguous and start at 1")
+        if event.occurred_at < previous_time:
+            raise ValueError("audit event chronology must be monotonic")
         if event.prior_event_sha256 != previous:
             raise ValueError("audit event prior hash does not match previous event")
         if event.event_sha256 != event_digest(event):
             raise ValueError("audit event digest does not match canonical event payload")
         previous = event.event_sha256
+        previous_time = event.occurred_at
+
+
+def _next_state(action: ReviewAction) -> WorkflowState:
+    if action == ReviewAction.SUBMIT:
+        return WorkflowState.SUBMITTED
+    if action == ReviewAction.START_REVIEW:
+        return WorkflowState.IN_REVIEW
+    if action == ReviewAction.REQUEST_CHANGES:
+        return WorkflowState.CHANGES_REQUESTED
+    if action == ReviewAction.APPROVE:
+        return WorkflowState.APPROVED
+    if action == ReviewAction.REJECT:
+        return WorkflowState.REJECTED
+    if action == ReviewAction.CANCEL:
+        return WorkflowState.CANCELLED
+    raise ValueError("unsupported workflow action")
 
 
 def derive_state(case: ReviewCase, events: list[AuditEvent]) -> WorkflowState:
+    """Derive state from an integrity-validated event sequence.
+
+    This function verifies structural/hash integrity but intentionally does not establish
+    that historical actors were authorized. Use ``verify_audit_history`` when policy
+    authorization must also be replayed.
+    """
+
     verify_audit_chain(case, events)
     state = WorkflowState.DRAFT
     for event in events:
-        if event.action == ReviewAction.SUBMIT:
-            state = WorkflowState.SUBMITTED
-        elif event.action == ReviewAction.START_REVIEW:
-            state = WorkflowState.IN_REVIEW
-        elif event.action == ReviewAction.REQUEST_CHANGES:
-            state = WorkflowState.CHANGES_REQUESTED
-        elif event.action == ReviewAction.APPROVE:
-            state = WorkflowState.APPROVED
-        elif event.action == ReviewAction.REJECT:
-            state = WorkflowState.REJECTED
-        elif event.action == ReviewAction.CANCEL:
-            state = WorkflowState.CANCELLED
+        state = _next_state(event.action)
     return state
 
 
@@ -181,7 +216,11 @@ def _authorize_transition(
     actor: ActorIdentity,
     policy: WorkflowPolicy,
 ) -> None:
-    if state in {WorkflowState.APPROVED, WorkflowState.REJECTED, WorkflowState.CANCELLED}:
+    if state in {
+        WorkflowState.APPROVED,
+        WorkflowState.REJECTED,
+        WorkflowState.CANCELLED,
+    }:
         raise ValueError("terminal workflow state cannot transition")
     if action == ReviewAction.SUBMIT:
         if state not in {WorkflowState.DRAFT, WorkflowState.CHANGES_REQUESTED}:
@@ -193,19 +232,34 @@ def _authorize_transition(
     if action == ReviewAction.START_REVIEW:
         if state != WorkflowState.SUBMITTED:
             raise ValueError("start_review requires submitted state")
-        _require_role(actor, {ReviewRole.REVIEWER, ReviewRole.SECURITY, ReviewRole.PRIVACY})
+        _require_role(
+            actor,
+            {ReviewRole.REVIEWER, ReviewRole.SECURITY, ReviewRole.PRIVACY},
+        )
         return
     if action == ReviewAction.REQUEST_CHANGES:
         if state not in {WorkflowState.SUBMITTED, WorkflowState.IN_REVIEW}:
-            raise ValueError("request_changes requires submitted or in_review state")
-        _require_role(actor, {ReviewRole.REVIEWER, ReviewRole.APPROVER, ReviewRole.SECURITY, ReviewRole.PRIVACY})
+            raise ValueError(
+                "request_changes requires submitted or in_review state"
+            )
+        _require_role(
+            actor,
+            {
+                ReviewRole.REVIEWER,
+                ReviewRole.APPROVER,
+                ReviewRole.SECURITY,
+                ReviewRole.PRIVACY,
+            },
+        )
         return
     if action in {ReviewAction.APPROVE, ReviewAction.REJECT}:
         if state != WorkflowState.IN_REVIEW:
             raise ValueError("approve/reject requires in_review state")
         _require_role(actor, set(policy.required_approval_roles))
         if actor.actor_id == case.created_by:
-            raise ValueError("maker-checker policy prohibits case creator self-approval")
+            raise ValueError(
+                "maker-checker policy prohibits case creator self-approval"
+            )
         if policy.approval_owner_ids and actor.actor_id not in policy.approval_owner_ids:
             raise ValueError("actor is not an authorized approval owner")
         return
@@ -215,6 +269,23 @@ def _authorize_transition(
         _require_role(actor, {ReviewRole.REQUESTER})
         return
     raise ValueError("unsupported workflow action")
+
+
+def verify_audit_history(
+    case: ReviewCase,
+    events: list[AuditEvent],
+    policy: WorkflowPolicy,
+) -> WorkflowState:
+    """Replay a tamper-evident history against the exact policy and RBAC semantics."""
+
+    if case.policy_sha256 != policy_digest(policy):
+        raise ValueError("review case does not bind the supplied workflow policy")
+    verify_audit_chain(case, events)
+    state = WorkflowState.DRAFT
+    for event in events:
+        _authorize_transition(case, state, event.action, event.actor, policy)
+        state = _next_state(event.action)
+    return state
 
 
 def append_audit_event(
@@ -228,7 +299,7 @@ def append_audit_event(
 ) -> AuditEvent:
     if case.policy_sha256 != policy_digest(policy):
         raise ValueError("review case does not bind the supplied workflow policy")
-    state = derive_state(case, events)
+    state = verify_audit_history(case, events, policy)
     _authorize_transition(case, state, action, actor, policy)
     prior = events[-1].event_sha256 if events else None
     provisional = AuditEvent(
@@ -242,4 +313,6 @@ def append_audit_event(
         payload_sha256=canonical_digest(payload),
         event_sha256="0" * 64,
     )
-    return provisional.model_copy(update={"event_sha256": event_digest(provisional)})
+    return provisional.model_copy(
+        update={"event_sha256": event_digest(provisional)}
+    )
