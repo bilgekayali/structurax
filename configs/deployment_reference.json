@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0-rc1",
+  "runtime_user": "structurax",
+  "run_as_non_root": true,
+  "read_only_root_filesystem": true,
+  "privileged": false,
+  "allow_privilege_escalation": false,
+  "outbound_network_default": "deny",
+  "tls_minimum_version": "TLSv1.3",
+  "database_tls_required": true,
+  "immutable_image_digest_required": true,
+  "dependency_install_at_runtime": false,
+  "secrets_delivery": "external-reference-only",
+  "evidence_key_material_in_config": false,
+  "observability_transport": "otlp-https-reference",
+  "raw_document_content_export_allowed": false,
+  "prompt_content_export_allowed": false,
+  "secret_content_export_allowed": false,
+  "production_deployment_performed": false,
+  "production_controls_validated": false,
+  "production_readiness_claimed": false
+}

@@ -1,14 +1,11 @@
 {
-  "compatibility_rule": "Required v0.5 public exports must remain importable during v1.0 preparation. Additions require explicit contract review.",
-  "contract_version": "1.0-prep",
-  "forbidden_public_export_prefixes": [
-    "_",
-    "unsafe_",
-    "auto_"
-  ],
-  "package_version_at_baseline": "0.5.0",
-  "production_readiness_claimed": false,
-  "required_public_exports": [
+  "contract_version": "1.0-rc1",
+  "status": "frozen-release-candidate",
+  "intended_release_version": "1.0.0",
+  "baseline_package_version": "0.5.0",
+  "allow_additive_exports": false,
+  "public_surface_sha256": "a2430fc46937c5e007b1e61b7ddb01bf8e42923f2113ae4feb9c248b97c7150d",
+  "exact_public_exports": [
     "AnalysisReport",
     "DocumentPack",
     "Policy",
@@ -24,5 +21,38 @@
     "verify_audit_chain",
     "verify_audit_history"
   ],
-  "status": "draft-pre-release"
+  "public_symbol_modules": {
+    "AnalysisReport": "structurax.models",
+    "DocumentPack": "structurax.models",
+    "Policy": "structurax.models",
+    "analyze_construction_case": "structurax.construction_intelligence",
+    "analyze_pack": "structurax.engine",
+    "assess_pilot_readiness": "structurax.pilot",
+    "evaluate_ai_adapters": "structurax.ai_evaluation",
+    "evaluate_rule_families": "structurax.evaluation",
+    "ingest_pdf_bytes": "structurax.ingestion",
+    "ingest_pdf_path": "structurax.ingestion",
+    "resolve_ai_extraction": "structurax.ai_adapters",
+    "run_ai_extraction": "structurax.ai_adapters",
+    "verify_audit_chain": "structurax.review_workflow",
+    "verify_audit_history": "structurax.review_workflow"
+  },
+  "public_symbol_kinds": {
+    "AnalysisReport": "class",
+    "DocumentPack": "class",
+    "Policy": "class",
+    "analyze_construction_case": "function",
+    "analyze_pack": "function",
+    "assess_pilot_readiness": "function",
+    "evaluate_ai_adapters": "function",
+    "evaluate_rule_families": "function",
+    "ingest_pdf_bytes": "function",
+    "ingest_pdf_path": "function",
+    "resolve_ai_extraction": "function",
+    "run_ai_extraction": "function",
+    "verify_audit_chain": "function",
+    "verify_audit_history": "function"
+  },
+  "compatibility_rule": "The release-candidate public export set is exact. Any additive, removal, module relocation, or symbol-kind change requires explicit contract review and a new baseline.",
+  "production_readiness_claimed": false
 }

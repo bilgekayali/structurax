@@ -60,11 +60,16 @@ schema-valid review bound to the exact repository digest and all gates are re-ru
 
 ## v1.0 — Stable production reference
 
-- [ ] Stable API/schema compatibility contract.
+- [x] Stable API/schema compatibility contract.
 - [ ] PostgreSQL tenant isolation and production identity boundary.
-- [ ] Encrypted evidence, observability and deployment reference.
+- [x] Encrypted evidence, observability and deployment reference.
 - [ ] SBOM/provenance, CodeQL and release gates.
 - [ ] Genuine independent security review before formal stable release.
+
+The API/schema surface is frozen for the release candidate with exact public-export and schema
+content identities. Security, encryption, PostgreSQL, identity, observability and deployment
+reference controls are executable and fail closed, but reference validation is not a claim that
+a production environment enforces those controls.
 
 The roadmap is directional, not a release commitment. Production use requires a separate
 risk assessment, governance model, security architecture, legal/privacy assessment, and

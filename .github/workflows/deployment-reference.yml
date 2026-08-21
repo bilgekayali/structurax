@@ -1,0 +1,54 @@
+name: Deployment Reference Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deployment-reference-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Validate deployment and observability reference
+        run: |
+          python scripts/validate_deployment_reference.py > /tmp/structurax-deployment-reference.json
+          cat /tmp/structurax-deployment-reference.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/structurax-deployment-reference.json').read_text())
+          assert report['reference_validation'] == 'passed'
+          assert report['run_as_non_root'] is True
+          assert report['read_only_root_filesystem'] is True
+          assert report['outbound_network_default'] == 'deny'
+          assert report['tls_minimum_version'] == 'TLSv1.3'
+          assert report['database_tls_required'] is True
+          assert report['immutable_image_digest_required'] is True
+          assert report['raw_content_exported'] is False
+          assert report['production_deployment_performed'] is False
+          assert report['production_controls_validated'] is False
+          assert report['production_readiness_claimed'] is False
+          PY
+
+      - name: Run deployment reference tests
+        run: python -m unittest tests.test_v10_contract_freeze_deployment -v

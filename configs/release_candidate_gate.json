@@ -1,10 +1,10 @@
 {
-  "gate_version": "1.0-prep",
+  "gate_version": "1.0-rc1",
   "formal_release_eligible": false,
   "required_release_version": "1.0.0",
   "checks": {
-    "stable_api_contract_frozen": false,
-    "stable_schema_contract_frozen": false,
+    "stable_api_contract_frozen": true,
+    "stable_schema_contract_frozen": true,
     "postgresql_tenant_isolation_validated": false,
     "external_identity_boundary_validated": false,
     "evidence_encryption_and_key_management_validated": false,
