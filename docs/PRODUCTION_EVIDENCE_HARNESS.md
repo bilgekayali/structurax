@@ -11,11 +11,11 @@ The harness covers the four production-only controls that remain false in `confi
 - Evidence encryption and key management.
 - Observability and deployment controls.
 
-A production validation statement must be bound to the canonical v1.0 release-surface digest and signed with an out-of-band trusted Ed25519 validator key. The committed envelope contains only opaque identifiers and SHA-256 evidence digests. Raw endpoints, credentials, secrets, connection strings, tokens, key material and production document content are forbidden.
+A production validation statement must be bound to the exact canonical `sha256-release-surface-v1` digest and signed with an out-of-band trusted Ed25519 validator key. The committed envelope contains only opaque identifiers and SHA-256 evidence digests. Raw endpoints, credentials, secrets, connection strings, tokens, key material and production document content are forbidden.
 
 ## Evidence shape
 
-`release-evidence-schemas/production-control-evidence.schema.json` defines the release-evidence schema. It intentionally lives outside `schemas/` so the already-frozen application schema surface remains unchanged.
+`release-evidence-schemas/production-control-evidence.schema.json` defines the final release-evidence schema. It intentionally lives outside `schemas/` so the frozen application schema surface remains unchanged.
 
 Each control must:
 
@@ -26,15 +26,19 @@ Each control must:
 5. record a timezone-aware completion timestamp; and
 6. confirm that a negative path was tested.
 
-The top-level statement must confirm that the validation occurred against a production environment while explicitly declaring that raw endpoint metadata and raw secret material are absent from the committed evidence.
+The top-level statement must confirm that validation occurred against a production environment while explicitly declaring that raw endpoint metadata and raw secret material are absent from committed evidence.
 
-## Signature and release-surface binding
+## Release-surface binding
 
-`scripts/assess_promotion_readiness.py` supplies `sha256-release-surface-v1` to the production-evidence verifier. `scripts/release_surface_digest.py` hashes Git-tracked source and policy state while canonicalizing only the explicit mechanical release metadata permitted by the final promotion transaction. This lets genuine production evidence remain valid across the final version/classifier-only promotion commit without making source, schema, workflow, dependency or security-policy changes invisible.
+`scripts/release_surface_digest.py` computes the v1.0 evidence-binding digest. It canonicalizes only the explicitly allowlisted final release metadata fields, so the mechanical `0.5.0` to `1.0.0` promotion can preserve evidence binding while any source, schema, workflow, dependency, security-policy or other tracked-byte change invalidates prior production evidence.
 
-`production-evidence/v1.0-controls.json` is excluded from the release-surface digest, just like independent-review and human release-approval evidence, so signed evidence can bind the reviewed source/configuration state without a circular hash dependency.
+`production-evidence/v1.0-controls.json` is excluded from the release-surface digest to avoid a circular hash dependency.
 
-The signature key identifier is the SHA-256 digest of the trusted raw Ed25519 public key. Merely committing a self-generated public key together with an evidence envelope is not sufficient evidence of validator trust. The trusted key must be supplied through the release governance process.
+## Collection and signing handoff
+
+`docs/PRODUCTION_EVIDENCE_COLLECTION.md` defines the operational collection flow. Secret-free per-control receipts are assembled into an unsigned statement, then converted into the canonical Ed25519 payload. The repository never handles a validator private key. An external trusted signer produces the signature, and the repository only attaches and verifies the signature with the separately supplied trusted public key.
+
+The signature key identifier is the SHA-256 digest of the trusted raw Ed25519 public key. Merely supplying a public key and a valid signature does not establish organizational trust in that key; the trust anchor must be established through the release-governance process.
 
 ## Fail-closed behavior
 

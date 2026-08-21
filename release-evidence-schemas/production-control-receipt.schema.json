@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://structurax.local/release-evidence/production-control-receipt.schema.json",
+  "title": "StructuraX Production Control Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_surface_sha256",
+    "environment_id",
+    "control_id",
+    "evidence_kind",
+    "result",
+    "validator_id",
+    "evidence_artifact_id",
+    "evidence_sha256",
+    "completed_at",
+    "negative_path_tested",
+    "raw_endpoint_metadata_present",
+    "raw_secret_material_present"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "release_surface_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "environment_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,159}$"},
+    "control_id": {
+      "enum": [
+        "postgresql_tenant_isolation_validated",
+        "external_identity_boundary_validated",
+        "evidence_encryption_and_key_management_validated",
+        "observability_and_deployment_controls_validated"
+      ]
+    },
+    "evidence_kind": {"type": "string", "minLength": 3, "maxLength": 160},
+    "result": {"const": "passed"},
+    "validator_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,159}$"},
+    "evidence_artifact_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,159}$"},
+    "evidence_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "negative_path_tested": {"const": true},
+    "raw_endpoint_metadata_present": {"const": false},
+    "raw_secret_material_present": {"const": false}
+  }
+}

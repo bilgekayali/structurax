@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.0-rc3",
+  "policy_version": "1.0-rc4",
   "branch": "main",
   "require_protected": true,
   "required_status_checks": [
@@ -10,6 +10,7 @@
     "security-reference-validation",
     "deployment-reference-validation",
     "release-evidence-validation",
+    "production-evidence-collection",
     "production-evidence-harness",
     "promotion-readiness",
     "formal-promotion-transaction",

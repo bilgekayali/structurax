@@ -1,0 +1,21 @@
+{
+  "policy_version": "1.0-rc1",
+  "receipt_schema_path": "release-evidence-schemas/production-control-receipt.schema.json",
+  "final_evidence_policy_path": "configs/production_evidence_policy.json",
+  "repository_digest_algorithm": "sha256-release-surface-v1",
+  "receipt_schema_version": "1.0.0",
+  "required_control_ids": [
+    "postgresql_tenant_isolation_validated",
+    "external_identity_boundary_validated",
+    "evidence_encryption_and_key_management_validated",
+    "observability_and_deployment_controls_validated"
+  ],
+  "require_distinct_external_evidence": true,
+  "require_negative_path_tested": true,
+  "allow_raw_endpoints": false,
+  "allow_raw_secrets": false,
+  "private_key_handling_allowed": false,
+  "automatic_signature_allowed": false,
+  "automatic_gate_mutation_allowed": false,
+  "production_readiness_claimed": false
+}
