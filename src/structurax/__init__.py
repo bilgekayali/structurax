@@ -2,6 +2,7 @@
 
 from structurax.ai_adapters import resolve_ai_extraction, run_ai_extraction
 from structurax.ai_evaluation import evaluate_ai_adapters
+from structurax.construction_intelligence import analyze_construction_case
 from structurax.engine import analyze_pack
 from structurax.evaluation import evaluate_rule_families
 from structurax.ingestion import ingest_pdf_bytes, ingest_pdf_path
@@ -13,6 +14,7 @@ __all__ = [
     "AnalysisReport",
     "DocumentPack",
     "Policy",
+    "analyze_construction_case",
     "analyze_pack",
     "assess_pilot_readiness",
     "evaluate_ai_adapters",
@@ -24,4 +26,4 @@ __all__ = [
     "verify_audit_chain",
     "verify_audit_history",
 ]
-__version__ = "0.4.0"
+__version__ = "0.5.0"
