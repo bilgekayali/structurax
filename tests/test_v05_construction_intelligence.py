@@ -2,7 +2,12 @@ import unittest
 from datetime import datetime, timezone
 
 from structurax.construction_intelligence import analyze_construction_case
-from structurax.construction_models import ConstructionIntelligenceCase, ConstructionPolicy
+from structurax.construction_lineage import graph_cycle
+from structurax.construction_models import (
+    ConstructionIntelligenceCase,
+    ConstructionPolicy,
+    LineageEdge,
+)
 
 D=lambda c:c*64
 T0=datetime(2026,8,21,12,0,tzinfo=timezone.utc)
@@ -66,12 +71,14 @@ class V05Tests(unittest.TestCase):
         self.assertIn("INVOICE_EXCEEDS_AUTHORIZED_QUANTITY", self.rules(r))
         self.assertIn("THREE_WAY_PO_MISMATCH", self.rules(r))
         self.assertIn("THREE_WAY_DELIVERY_MISMATCH", self.rules(r))
+        self.assertIn("PROJECT_INVOICED_COST_OVERRUN", self.rules(r))
         self.assertEqual(r.matches[0].status.value,"block")
 
     def test_rate_above_authority_blocks(self):
         def mutate(p): p["invoices"][0]["unit_rate"]="1200"
         r=analyze_construction_case(case(mutate))
         self.assertIn("UNIT_RATE_EXCEEDS_AUTHORIZED", self.rules(r))
+        self.assertIn("PROJECT_INVOICED_COST_OVERRUN", self.rules(r))
         self.assertEqual(r.matches[0].status.value,"block")
 
     def test_approved_variation_can_extend_authority(self):
@@ -104,6 +111,17 @@ class V05Tests(unittest.TestCase):
         r=analyze_construction_case(case(mutate))
         self.assertIn("INVOICE_EXCEEDS_AUTHORIZED_QUANTITY", self.rules(r))
 
+    def test_future_approved_variation_does_not_extend_current_authority(self):
+        def mutate(p):
+            p["variation_orders"][0]["effective_at"]="2026-09-01"
+            p["variation_orders"][0]["quantity_delta"]="20"
+            p["purchase_orders"][0]["quantity"]="120"
+            p["deliveries"][0]["quantity"]="120"
+            p["invoices"][0]["quantity"]="120"
+        r=analyze_construction_case(case(mutate))
+        self.assertIn("INVOICE_EXCEEDS_AUTHORIZED_QUANTITY", self.rules(r))
+        self.assertFalse(r.matches[0].authorized_quantity_ok)
+
     def test_approved_variation_requires_contract_lineage(self):
         def mutate(p):
             p["lineage_edges"]=[e for e in p["lineage_edges"] if not (e["from_artifact_id"]=="CONTRACT-001" and e["to_artifact_id"]=="VO-001")]
@@ -117,6 +135,14 @@ class V05Tests(unittest.TestCase):
         finding=next(f for f in r.findings if f.rule_id=="SUPPLIER_UNIT_RATE_ANOMALY")
         self.assertEqual(finding.severity.value,"medium")
 
+    def test_future_supplier_history_is_rejected(self):
+        p=base_payload()
+        p["supplier_price_history"].append(
+            {"supplier_id":"SUP-001","item_code":"C30","observed_at":"2026-09-01","unit_rate":"1000","evidence_sha256":D("e")}
+        )
+        with self.assertRaisesRegex(ValueError,"future observations"):
+            ConstructionIntelligenceCase.model_validate(p)
+
     def test_boq_quantity_variance(self):
         def mutate(p):
             p["variation_orders"][0]["quantity_delta"]="10"
@@ -129,13 +155,22 @@ class V05Tests(unittest.TestCase):
         r=analyze_construction_case(case(mutate))
         self.assertIn("PROJECT_AUTHORIZED_COST_OVERRUN", self.rules(r))
 
-    def test_lineage_cycle_is_detected(self):
-        def mutate(p):
-            p["lineage_edges"].append({"from_artifact_id":"INV-001","to_artifact_id":"BOQ-001","relation":"authorizes"})
-            p["lineage_edges"]=sorted(p["lineage_edges"],key=lambda e:(e["from_artifact_id"],e["to_artifact_id"],e["relation"]))
-        r=analyze_construction_case(case(mutate))
-        self.assertTrue(r.lineage_summary.cycle_detected)
-        self.assertIn("LINEAGE_CYCLE", self.rules(r))
+    def test_graph_cycle_helper_detects_cycle(self):
+        nodes=["A","B"]
+        edges=[
+            LineageEdge(from_artifact_id="AAA",to_artifact_id="BBB",relation="amends"),
+            LineageEdge(from_artifact_id="BBB",to_artifact_id="AAA",relation="amends"),
+        ]
+        self.assertTrue(graph_cycle(["AAA","BBB"],edges))
+
+    def test_invalid_lineage_relation_type_pair_fails_closed(self):
+        p=base_payload()
+        for edge in p["lineage_edges"]:
+            if edge["to_artifact_id"]=="INV-001":
+                edge["relation"]="authorizes"
+        p["lineage_edges"]=sorted(p["lineage_edges"],key=lambda e:(e["from_artifact_id"],e["to_artifact_id"],e["relation"]))
+        with self.assertRaisesRegex(ValueError,"authorizes lineage"):
+            ConstructionIntelligenceCase.model_validate(p)
 
     def test_invoice_without_contract_path_is_detected(self):
         def mutate(p):
