@@ -83,6 +83,12 @@ manual GitHub attestation step. This is preparation only: the SBOM/provenance mi
 open until release evidence is attached and attested for the exact accepted candidate and the
 repository-level CodeQL/release governance controls are actually enforced.
 
+An operational promotion handoff now converts the repository governance policy into the exact
+GitHub branch-protection REST payload, verifies a captured full protection response, and combines
+live governance, production evidence and independent-review state into one fail-closed promotion
+matrix. This does not enable branch protection or authorize gate mutation; an administrator must
+apply repository rules and the final promotion remains a separately reviewed change.
+
 The roadmap is directional, not a release commitment. Production use requires a separate
 risk assessment, governance model, security architecture, legal/privacy assessment, and
 validation against the actual organization, document types, contracts, models, providers
