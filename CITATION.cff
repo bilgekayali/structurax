@@ -5,13 +5,18 @@ type: software
 authors:
   - family-names: "Kayalı"
     given-names: "Bilge"
-version: 0.4.0
+version: 0.5.0
 date-released: 2026-08-21
 repository-code: "https://github.com/bilgekayali/structurax"
 url: "https://github.com/bilgekayali/structurax"
 license: Apache-2.0
 keywords:
   - construction document intelligence
+  - construction commercial controls
+  - BOQ reconciliation
+  - document lineage
+  - three-way matching
+  - four-way matching
   - information security
   - risk analysis
   - trustworthy AI
