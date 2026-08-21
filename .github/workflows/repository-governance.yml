@@ -1,0 +1,46 @@
+name: Repository Governance
+
+on:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "41 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository-governance-assessment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Assess observable main-branch governance
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/assess_repository_governance.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --branch main \
+            --output /tmp/structurax-repository-governance.json
+          cat /tmp/structurax-repository-governance.json
+
+      - name: Enforce non-claim semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('/tmp/structurax-repository-governance.json').read_text())
+          assert report['production_readiness_claimed'] is False
+          assert report['manual_controls_verified'] is False
+          PY

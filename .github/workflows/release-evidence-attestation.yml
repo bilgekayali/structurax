@@ -1,0 +1,54 @@
+name: Release Evidence Attestation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+  artifact-metadata: write
+
+jobs:
+  attested-release-evidence-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: python -m pip install .
+
+      - name: Build wheel
+        run: python -m pip wheel . --no-deps --wheel-dir dist
+
+      - name: Generate release evidence bundle
+        run: |
+          python scripts/generate_dependency_sbom.py > dist/structurax-dependency-sbom.cdx.json
+          python scripts/build_release_provenance.py > dist/structurax-source-provenance.json
+          python scripts/assess_release_gate.py > dist/structurax-release-gate.json
+          sha256sum dist/*.whl > dist/subject.checksums.txt
+
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/*.whl
+
+      - name: Attest dependency SBOM
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/*.whl
+          sbom-path: dist/structurax-dependency-sbom.cdx.json
+
+      - name: Upload evidence bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: structurax-attested-release-evidence-preview
+          path: dist/
+          if-no-files-found: error

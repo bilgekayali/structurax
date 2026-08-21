@@ -53,7 +53,11 @@ jobs:
           python scripts/assess_release_gate.py > /tmp/structurax-release-gate.json
           grep -q '"eligible": false' /tmp/structurax-release-gate.json
           grep -q '"independent_security_review_verified"' /tmp/structurax-release-gate.json
+          grep -q '"main_branch_protection_verified"' /tmp/structurax-release-gate.json
+          grep -q '"required_status_checks_verified"' /tmp/structurax-release-gate.json
           grep -q '"package_version_not_1_0_0"' /tmp/structurax-release-gate.json
 
-      - name: Run v1.0 release-gate tests
-        run: python -m unittest tests.test_v10_release_gates -v
+      - name: Run v1.0 release and governance gate tests
+        run: |
+          python -m unittest tests.test_v10_release_gates -v
+          python -m unittest tests.test_v10_repository_governance -v
