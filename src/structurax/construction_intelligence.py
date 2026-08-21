@@ -176,6 +176,30 @@ def analyze_construction_case(
                 ),
             )
         )
+    if invoice_variance > active.project_budget_variance_percent:
+        findings.append(
+            ConstructionFinding(
+                rule_id="PROJECT_INVOICED_COST_OVERRUN",
+                severity=Severity.HIGH,
+                title="Invoiced project cost exceeds BOQ budget threshold",
+                description=(
+                    "Cumulative invoiced value exceeds the configured BOQ budget "
+                    "variance threshold."
+                ),
+                evidence=[
+                    ConstructionEvidenceRef(
+                        artifact_id=case.boq_lines[0].artifact_id,
+                        field="project_invoiced_vs_boq",
+                        observed=str(qmoney(invoiced_total)),
+                        expected=str(boq_budget),
+                    )
+                ],
+                recommendation=(
+                    "Reconcile invoiced value to approved budget, contract authority, "
+                    "forecast and payment history before further approval."
+                ),
+            )
+        )
 
     node_ids = [node.artifact_id for node in case.lineage_nodes]
     cycle = graph_cycle(node_ids, case.lineage_edges)
