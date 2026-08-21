@@ -124,11 +124,20 @@ jobs:
       - name: Exercise v0.5 construction intelligence
         run: |
           python scripts/build_construction_reference.py
-          grep -q '"findings": \[\]' reports/evaluation/v0.5-clean-construction.json
-          grep -q '"status": "matched"' reports/evaluation/v0.5-clean-construction.json
-          grep -q '"status": "block"' reports/evaluation/v0.5-risky-construction.json
-          grep -q '"automation_authority": false' reports/evaluation/v0.5-risky-construction.json
-          grep -q '"operational_side_effects_performed": false' reports/evaluation/v0.5-risky-construction.json
+          structurax construction-analyze \
+            --case datasets/construction/clean_case.json \
+            --policy configs/construction_policy.json \
+            --output /tmp/structurax-construction-clean.json
+          grep -q '"findings": \[\]' /tmp/structurax-construction-clean.json
+          grep -q '"status": "matched"' /tmp/structurax-construction-clean.json
+          structurax construction-analyze \
+            --case datasets/construction/risky_case.json \
+            --policy configs/construction_policy.json \
+            --output /tmp/structurax-construction-risky.json
+          grep -q '"status": "block"' /tmp/structurax-construction-risky.json
+          grep -q '"rule_id": "PROJECT_INVOICED_COST_OVERRUN"' /tmp/structurax-construction-risky.json
+          grep -q '"automation_authority": false' /tmp/structurax-construction-risky.json
+          grep -q '"operational_side_effects_performed": false' /tmp/structurax-construction-risky.json
 
       - name: Verify deterministic repository review digest
         run: |
