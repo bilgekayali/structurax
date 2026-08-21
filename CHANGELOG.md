@@ -2,6 +2,25 @@
 
 All notable changes to StructuraX are documented here.
 
+## [0.5.0] - 2026-08-21
+
+### Added
+
+- Strict synthetic construction-intelligence contracts for BOQ, contract, variation-order, purchase-order, delivery, invoice and supplier price-history evidence.
+- Deterministic three-way and four-way matching with cumulative quantity and authorized-rate checks.
+- Contract authority derived only from approved, evidence-backed, explicitly linked and currently effective variation orders.
+- Typed document-lineage graph with canonical edges, relation-type validation, contract-path checks and cycle defense.
+- BOQ quantity, authorized project-cost and realized invoiced-cost variance evidence.
+- Supplier unit-rate anomaly review signal based on a minimum deterministic historical median; future observations are rejected.
+- Clean and deliberately risky synthetic construction cases, deterministic evaluation reports and compact JSON Schemas.
+- `structurax construction-analyze` CLI command and CI coverage across Python 3.11, 3.12 and 3.13.
+
+### Security boundary
+
+- v0.5 remains deterministic and reference-only; it performs no live OCR/model call, payment, ERP mutation, deployment, procurement commitment or external notification.
+- `matched`, `review` and `block` are evidence classifications only and do not carry automation authority.
+- Supplier anomalies and cost variances are review signals, not proof of fraud, overcharging, contractual entitlement, legal liability or engineering correctness.
+
 ## [0.4.0] - 2026-08-21
 
 ### Added
