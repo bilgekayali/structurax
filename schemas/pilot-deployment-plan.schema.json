@@ -1,0 +1,313 @@
+{
+  "$defs": {
+    "AccessControlProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "break_glass_review_required": {
+          "const": true,
+          "default": true,
+          "title": "Break Glass Review Required",
+          "type": "boolean"
+        },
+        "default_deny": {
+          "const": true,
+          "default": true,
+          "title": "Default Deny",
+          "type": "boolean"
+        },
+        "mfa_required_for_humans": {
+          "const": true,
+          "default": true,
+          "title": "Mfa Required For Humans",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "0.4.0",
+          "default": "0.4.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "service_accounts_no_human_login": {
+          "const": true,
+          "default": true,
+          "title": "Service Accounts No Human Login",
+          "type": "boolean"
+        },
+        "tenant_boundary_required": {
+          "const": true,
+          "default": true,
+          "title": "Tenant Boundary Required",
+          "type": "boolean"
+        }
+      },
+      "title": "AccessControlProfile",
+      "type": "object"
+    },
+    "DataHandlingProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "const": "pilot_restricted",
+          "default": "pilot_restricted",
+          "title": "Classification",
+          "type": "string"
+        },
+        "deletion_requires_authorized_human": {
+          "const": true,
+          "default": true,
+          "title": "Deletion Requires Authorized Human",
+          "type": "boolean"
+        },
+        "least_privilege_required": {
+          "const": true,
+          "default": true,
+          "title": "Least Privilege Required",
+          "type": "boolean"
+        },
+        "raw_document_text_in_audit": {
+          "const": false,
+          "default": false,
+          "title": "Raw Document Text In Audit",
+          "type": "boolean"
+        },
+        "retention_days": {
+          "maximum": 3650,
+          "minimum": 1,
+          "title": "Retention Days",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "0.4.0",
+          "default": "0.4.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "secrets_in_evidence": {
+          "const": false,
+          "default": false,
+          "title": "Secrets In Evidence",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "retention_days"
+      ],
+      "title": "DataHandlingProfile",
+      "type": "object"
+    },
+    "HumanCheckpoint": {
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint_id": {
+          "maxLength": 120,
+          "minLength": 3,
+          "title": "Checkpoint Id",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "const": "synthetic_reference",
+          "default": "synthetic_reference",
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "evidence_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Evidence Sha256",
+          "type": "string"
+        },
+        "owner_id": {
+          "maxLength": 120,
+          "minLength": 3,
+          "title": "Owner Id",
+          "type": "string"
+        },
+        "satisfied": {
+          "title": "Satisfied",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "checkpoint_id",
+        "owner_id",
+        "evidence_sha256",
+        "satisfied"
+      ],
+      "title": "HumanCheckpoint",
+      "type": "object"
+    },
+    "IncidentResponseProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "ai_control_failure_process_defined": {
+          "const": true,
+          "default": true,
+          "title": "Ai Control Failure Process Defined",
+          "type": "boolean"
+        },
+        "automatic_external_notification_permitted": {
+          "const": false,
+          "default": false,
+          "title": "Automatic External Notification Permitted",
+          "type": "boolean"
+        },
+        "human_notification_required": {
+          "const": true,
+          "default": true,
+          "title": "Human Notification Required",
+          "type": "boolean"
+        },
+        "incident_owner_id": {
+          "maxLength": 120,
+          "minLength": 3,
+          "title": "Incident Owner Id",
+          "type": "string"
+        },
+        "privacy_incident_process_defined": {
+          "const": true,
+          "default": true,
+          "title": "Privacy Incident Process Defined",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "0.4.0",
+          "default": "0.4.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "security_incident_process_defined": {
+          "const": true,
+          "default": true,
+          "title": "Security Incident Process Defined",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "incident_owner_id"
+      ],
+      "title": "IncidentResponseProfile",
+      "type": "object"
+    },
+    "RollbackPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "automatic_rollback_without_human": {
+          "const": false,
+          "default": false,
+          "title": "Automatic Rollback Without Human",
+          "type": "boolean"
+        },
+        "backup_required": {
+          "const": true,
+          "default": true,
+          "title": "Backup Required",
+          "type": "boolean"
+        },
+        "max_recovery_minutes": {
+          "maximum": 1440,
+          "minimum": 1,
+          "title": "Max Recovery Minutes",
+          "type": "integer"
+        },
+        "rollback_owner_id": {
+          "maxLength": 120,
+          "minLength": 3,
+          "title": "Rollback Owner Id",
+          "type": "string"
+        },
+        "rollback_test_evidence_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Rollback Test Evidence Sha256",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "0.4.0",
+          "default": "0.4.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rollback_owner_id",
+        "rollback_test_evidence_sha256",
+        "max_recovery_minutes"
+      ],
+      "title": "RollbackPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "access_control": {
+      "$ref": "#/$defs/AccessControlProfile"
+    },
+    "automated_approval_permitted": {
+      "const": false,
+      "default": false,
+      "title": "Automated Approval Permitted",
+      "type": "boolean"
+    },
+    "data_handling": {
+      "$ref": "#/$defs/DataHandlingProfile"
+    },
+    "deployment_performed": {
+      "const": false,
+      "default": false,
+      "title": "Deployment Performed",
+      "type": "boolean"
+    },
+    "human_checkpoints": {
+      "items": {
+        "$ref": "#/$defs/HumanCheckpoint"
+      },
+      "maxItems": 20,
+      "minItems": 4,
+      "title": "Human Checkpoints",
+      "type": "array"
+    },
+    "incident_response": {
+      "$ref": "#/$defs/IncidentResponseProfile"
+    },
+    "live_model_calls_permitted": {
+      "const": false,
+      "default": false,
+      "title": "Live Model Calls Permitted",
+      "type": "boolean"
+    },
+    "plan_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "reference_only": {
+      "const": true,
+      "default": true,
+      "title": "Reference Only",
+      "type": "boolean"
+    },
+    "rollback": {
+      "$ref": "#/$defs/RollbackPlan"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "workflow_policy_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Workflow Policy Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "plan_id",
+    "workflow_policy_sha256",
+    "data_handling",
+    "access_control",
+    "incident_response",
+    "rollback",
+    "human_checkpoints"
+  ],
+  "title": "PilotDeploymentPlan",
+  "type": "object"
+}

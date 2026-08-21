@@ -1,0 +1,66 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "all_human_checkpoints_satisfied": {
+      "title": "All Human Checkpoints Satisfied",
+      "type": "boolean"
+    },
+    "automated_action_authority": {
+      "const": false,
+      "default": false,
+      "title": "Automated Action Authority",
+      "type": "boolean"
+    },
+    "deployment_performed": {
+      "const": false,
+      "default": false,
+      "title": "Deployment Performed",
+      "type": "boolean"
+    },
+    "eligible": {
+      "title": "Eligible",
+      "type": "boolean"
+    },
+    "independent_security_review_present": {
+      "title": "Independent Security Review Present",
+      "type": "boolean"
+    },
+    "plan_id": {
+      "title": "Plan Id",
+      "type": "string"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "red_team_passed": {
+      "title": "Red Team Passed",
+      "type": "boolean"
+    },
+    "reference_only": {
+      "const": true,
+      "default": true,
+      "title": "Reference Only",
+      "type": "boolean"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "plan_id",
+    "eligible",
+    "reasons",
+    "red_team_passed",
+    "independent_security_review_present",
+    "all_human_checkpoints_satisfied"
+  ],
+  "title": "PilotReadinessAssessment",
+  "type": "object"
+}

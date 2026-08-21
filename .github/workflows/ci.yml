@@ -57,13 +57,18 @@ jobs:
             --output /tmp/structurax-ingestion.json
           grep -q '"external_execution_performed": false' /tmp/structurax-ingestion.json
 
-      - name: Enforce closed v0.3 AI core imports
+      - name: Enforce closed v0.3 and v0.4 core imports
         run: |
           python - <<'PY'
           import ast
           from pathlib import Path
           banned = {"asyncio", "ftplib", "http", "httpx", "requests", "socket", "subprocess", "telnetlib", "urllib"}
-          for relative in ("src/structurax/ai_adapters.py", "src/structurax/ai_evaluation.py"):
+          for relative in (
+              "src/structurax/ai_adapters.py",
+              "src/structurax/ai_evaluation.py",
+              "src/structurax/review_workflow.py",
+              "src/structurax/pilot.py",
+          ):
               tree = ast.parse(Path(relative).read_text(encoding="utf-8"), filename=relative)
               found = set()
               for node in ast.walk(tree):
@@ -102,15 +107,31 @@ jobs:
             --output /tmp/structurax-ai-benchmark.json
           grep -q '"live_model_calls_performed": false' /tmp/structurax-ai-benchmark.json
 
+      - name: Exercise v0.4 workflow and pilot gates
+        run: |
+          python scripts/evaluate_pilot_controls.py
+          grep -q '"eligible": false' reports/evaluation/v0.4-pilot-readiness.json
+          grep -q '"independent_security_review_missing"' reports/evaluation/v0.4-pilot-readiness.json
+          grep -q '"deployment_performed": false' reports/evaluation/v0.4-pilot-readiness.json
+
+      - name: Verify deterministic repository review digest
+        run: |
+          digest_one="$(python scripts/repository_review_digest.py)"
+          digest_two="$(python scripts/repository_review_digest.py)"
+          test "$digest_one" = "$digest_two"
+          test "${#digest_one}" -eq 64
+
       - name: Regenerate deterministic artifacts
         run: |
           python scripts/build_ai_fixtures.py
+          python scripts/build_pilot_reference.py
           python scripts/generate_schema.py
           python scripts/build_demo_reports.py
           python scripts/evaluate_rule_cases.py
           python scripts/evaluate_ai_adapters.py
+          python scripts/evaluate_pilot_controls.py
 
       - name: Verify committed artifacts
         run: |
-          git diff --exit-code -- datasets/ai schemas reports/demo reports/evaluation
-          test -z "$(git status --porcelain -- datasets/ai schemas reports/demo reports/evaluation)"
+          git diff --exit-code -- configs/pilot_policy.json configs/pilot_plan.json datasets/ai datasets/workflow schemas reports/demo reports/evaluation
+          test -z "$(git status --porcelain -- configs/pilot_policy.json configs/pilot_plan.json datasets/ai datasets/workflow schemas reports/demo reports/evaluation)"

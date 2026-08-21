@@ -1,0 +1,79 @@
+{
+  "$defs": {
+    "RedTeamScenarioResult": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_control": {
+          "maxLength": 300,
+          "minLength": 3,
+          "title": "Expected Control",
+          "type": "string"
+        },
+        "observed_control": {
+          "maxLength": 300,
+          "minLength": 3,
+          "title": "Observed Control",
+          "type": "string"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "scenario_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,119}$",
+          "title": "Scenario Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scenario_id",
+        "expected_control",
+        "observed_control",
+        "passed"
+      ],
+      "title": "RedTeamScenarioResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "exercise_id": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$",
+      "title": "Exercise Id",
+      "type": "string"
+    },
+    "performed_at": {
+      "format": "date-time",
+      "title": "Performed At",
+      "type": "string"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/RedTeamScenarioResult"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "0.4.0",
+      "default": "0.4.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "synthetic_only": {
+      "const": true,
+      "default": true,
+      "title": "Synthetic Only",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "exercise_id",
+    "performed_at",
+    "scenarios"
+  ],
+  "title": "RedTeamReport",
+  "type": "object"
+}
