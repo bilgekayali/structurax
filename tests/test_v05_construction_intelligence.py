@@ -74,11 +74,11 @@ class V05Tests(unittest.TestCase):
         self.assertIn("PROJECT_INVOICED_COST_OVERRUN", self.rules(r))
         self.assertEqual(r.matches[0].status.value,"block")
 
-    def test_rate_above_authority_blocks(self):
+    def test_rate_above_authority_blocks_without_project_overrun(self):
         def mutate(p): p["invoices"][0]["unit_rate"]="1200"
         r=analyze_construction_case(case(mutate))
         self.assertIn("UNIT_RATE_EXCEEDS_AUTHORIZED", self.rules(r))
-        self.assertIn("PROJECT_INVOICED_COST_OVERRUN", self.rules(r))
+        self.assertNotIn("PROJECT_INVOICED_COST_OVERRUN", self.rules(r))
         self.assertEqual(r.matches[0].status.value,"block")
 
     def test_approved_variation_can_extend_authority(self):
