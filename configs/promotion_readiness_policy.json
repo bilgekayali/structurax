@@ -1,6 +1,7 @@
 {
-  "policy_version": "1.0-rc2",
+  "policy_version": "1.0-rc3",
   "required_release_version": "1.0.0",
+  "release_surface_digest_algorithm": "sha256-release-surface-v1",
   "gate_check_domains": {
     "stable_contracts": [
       "stable_api_contract_frozen",

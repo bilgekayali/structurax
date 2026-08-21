@@ -71,7 +71,7 @@ content identities. Security, encryption, PostgreSQL, identity, observability an
 reference controls are executable and fail closed, but reference validation is not a claim that
 a production environment enforces those controls.
 
-A production-evidence harness now defines an Ed25519-signed, exact-repository-digest-bound
+A production-evidence harness now defines an Ed25519-signed, release-surface-digest-bound
 contract for real PostgreSQL, identity, KMS/encryption and observability/deployment validation.
 Ordinary CI deliberately contains no production evidence and cannot auto-promote those controls;
 a trusted validator key and real external evidence remain required before human-reviewed gate
@@ -88,6 +88,13 @@ GitHub branch-protection REST payload, verifies a captured full protection respo
 live governance, production evidence and independent-review state into one fail-closed promotion
 matrix. This does not enable branch protection or authorize gate mutation; an administrator must
 apply repository rules and the final promotion remains a separately reviewed change.
+
+Formal promotion now has a two-phase transaction contract. External evidence is bound to a
+release-surface digest that normalizes only the explicitly allowlisted version/classifier metadata
+fields, so a final metadata-only `0.5.0` to `1.0.0` promotion can preserve reviewed source identity.
+The promotion planner remains non-mutating and requires every non-version blocker to be closed
+before it can propose those metadata changes; tagging and publishing still require separate human
+authorization and post-mutation verification.
 
 The roadmap is directional, not a release commitment. Production use requires a separate
 risk assessment, governance model, security architecture, legal/privacy assessment, and

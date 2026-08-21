@@ -12,14 +12,14 @@ import structurax
 try:
     from scripts.assess_release_gate import load_gate
     from scripts.assess_repository_governance import assess_snapshot, fetch_branch_snapshot
-    from scripts.repository_review_digest import compute_repository_digest
+    from scripts.release_surface_digest import compute_release_surface_digest
     from scripts.verify_branch_protection_snapshot import verify_branch_protection_snapshot
     from scripts.verify_independent_review import verify_independent_review
     from scripts.verify_production_evidence import verify_production_evidence
 except ModuleNotFoundError:  # direct script execution
     from assess_release_gate import load_gate
     from assess_repository_governance import assess_snapshot, fetch_branch_snapshot
-    from repository_review_digest import compute_repository_digest
+    from release_surface_digest import compute_release_surface_digest
     from verify_branch_protection_snapshot import verify_branch_protection_snapshot
     from verify_independent_review import verify_independent_review
     from verify_production_evidence import verify_production_evidence
@@ -105,7 +105,7 @@ def assess_promotion_readiness(
     active_gate = gate or load_gate()
     active_policy = policy or load_policy()
     candidate_checks = dict(active_gate["checks"])
-    digest = repository_digest or compute_repository_digest(ROOT)
+    digest = repository_digest or compute_release_surface_digest(ROOT)
 
     if branch_snapshot is None:
         branch_report = {
@@ -167,6 +167,7 @@ def assess_promotion_readiness(
         "policy_version": active_policy["policy_version"],
         "gate_version": active_gate["gate_version"],
         "repository_sha256": digest,
+        "repository_digest_algorithm": active_policy["release_surface_digest_algorithm"],
         "package_version": observed_version,
         "required_release_version": required_version,
         "candidate_checks": candidate_checks,
