@@ -72,7 +72,7 @@ jobs:
           grep -q '"independent_security_review_verified"' /tmp/structurax-release-gate.json
           grep -q '"main_branch_protection_verified"' /tmp/structurax-release-gate.json
           grep -q '"required_status_checks_verified"' /tmp/structurax-release-gate.json
-          grep -q '"package_version_not_1_0_0"' /tmp/structurax-release-gate.json
+          if grep -q '"package_version_not_1_0_0"' /tmp/structurax-release-gate.json; then exit 1; fi
           if grep -q '"stable_api_contract_frozen"' /tmp/structurax-release-gate.json; then exit 1; fi
           if grep -q '"stable_schema_contract_frozen"' /tmp/structurax-release-gate.json; then exit 1; fi
 
