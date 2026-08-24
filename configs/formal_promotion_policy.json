@@ -1,27 +1,15 @@
 {
-  "policy_version": "1.0-rc3",
-  "pre_promotion_version": "0.5.0",
+  "policy_version": "1.0-rc4",
+  "package_baseline_version": "1.0.0",
   "target_version": "1.0.0",
   "target_tag": "v1.0.0",
   "release_surface_digest_algorithm": "sha256-release-surface-v1",
   "allowed_metadata_mutations": [
     {
       "path": "pyproject.toml",
-      "field": "project.version",
-      "from": "0.5.0",
-      "to": "1.0.0"
-    },
-    {
-      "path": "pyproject.toml",
       "field": "project.classifiers.development_status",
       "from": "Development Status :: 3 - Alpha",
       "to": "Development Status :: 5 - Production/Stable"
-    },
-    {
-      "path": "src/structurax/__init__.py",
-      "field": "__version__",
-      "from": "0.5.0",
-      "to": "1.0.0"
     }
   ],
   "required_post_mutation_checks": [
