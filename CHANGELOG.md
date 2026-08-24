@@ -2,6 +2,21 @@
 
 All notable changes to StructuraX are documented here.
 
+## [1.0.0] - 2026-08-24
+
+### Changed
+
+- Promoted package metadata and `structurax.__version__` to `1.0.0` as the v1 package baseline.
+- Updated formal-promotion policy so `1.0.0` is the package baseline while the `Production/Stable` classifier remains a separate, gated human-approved release action.
+- Kept release-surface hashing tolerant only of the approved release metadata fields; source, policy, workflow, dependency and schema changes remain digest-significant.
+- Updated citation metadata and release diagnostics to the `1.0.0` package baseline.
+
+### Security boundary
+
+- The `1.0.0` package-version baseline does **not** assert formal release eligibility or production readiness.
+- Genuine independent security review, signed production-control evidence, authenticated repository-governance verification, complete release SBOM/provenance attestation and human release approval remain required before the `Production/Stable` classifier, release tag or publication can be treated as formally promoted.
+- `formal_release_eligible` and `production_readiness_claimed` remain fail-closed until those controls are verified.
+
 ## [0.5.0] - 2026-08-21
 
 ### Added
