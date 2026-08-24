@@ -65,7 +65,7 @@ class V10ReleaseGateTests(unittest.TestCase):
         self.assertNotIn("stable_schema_contract_frozen", payload["blockers"])
         self.assertIn("independent_security_review_verified", payload["blockers"])
         self.assertIn("build_provenance_attested", payload["blockers"])
-        self.assertIn("package_version_not_1_0_0", payload["blockers"])
+        self.assertNotIn("package_version_not_1_0_0", payload["blockers"])
         self.assertFalse(payload["production_readiness_claimed"])
 
     def test_release_gate_cannot_claim_eligible_with_blockers(self):
