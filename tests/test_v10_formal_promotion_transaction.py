@@ -17,12 +17,12 @@ class V10FormalPromotionTransactionTests(unittest.TestCase):
         (root / "src/structurax").mkdir(parents=True)
         (root / "release-approval").mkdir(parents=True)
         (root / "pyproject.toml").write_text(
-            '[project]\nname = "structurax"\nversion = "0.5.0"\nclassifiers = [\n'
+            '[project]\nname = "structurax"\nversion = "1.0.0"\nclassifiers = [\n'
             '  "Development Status :: 3 - Alpha",\n]\n',
             encoding="utf-8",
         )
         (root / "src/structurax/__init__.py").write_text(
-            '__version__ = "0.5.0"\n', encoding="utf-8"
+            '__version__ = "1.0.0"\n', encoding="utf-8"
         )
         (root / "src/structurax/core.py").write_text("VALUE = 1\n", encoding="utf-8")
         (root / "release-approval/v1.0-promotion.json").write_text(
@@ -36,29 +36,25 @@ class V10FormalPromotionTransactionTests(unittest.TestCase):
         gate = json.loads((ROOT / "configs/release_candidate_gate.json").read_text(encoding="utf-8"))
         return {
             "repository_sha256": digest,
-            "package_version": "0.5.0",
+            "package_version": "1.0.0",
             "candidate_checks": {name: True for name in gate["checks"]},
-            "blockers": ["package_version_not_1_0_0"],
-            "ready_for_human_promotion": False,
+            "blockers": [],
+            "ready_for_human_promotion": True,
             "human_promotion_required": True,
             "formal_gate_mutation_authorized": False,
             "production_readiness_claimed": False,
         }
 
-    def test_release_metadata_promotion_preserves_release_surface_digest(self):
+    def test_stable_classifier_promotion_preserves_release_surface_digest(self):
         temp, root = self._tracked_repo()
         try:
             before = compute_release_surface_digest(root)
             pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
-            pyproject = pyproject.replace('version = "0.5.0"', 'version = "1.0.0"')
             pyproject = pyproject.replace(
                 "Development Status :: 3 - Alpha",
                 "Development Status :: 5 - Production/Stable",
             )
             (root / "pyproject.toml").write_text(pyproject, encoding="utf-8")
-            (root / "src/structurax/__init__.py").write_text(
-                '__version__ = "1.0.0"\n', encoding="utf-8"
-            )
             after = compute_release_surface_digest(root)
             self.assertEqual(before, after)
         finally:
@@ -86,7 +82,7 @@ class V10FormalPromotionTransactionTests(unittest.TestCase):
         finally:
             temp.cleanup()
 
-    def test_all_non_version_checks_can_produce_a_human_only_promotion_plan(self):
+    def test_all_checks_can_produce_a_human_only_stable_promotion_plan(self):
         digest = "a" * 64
         plan = build_formal_promotion_plan(
             self._ready_report(digest),
@@ -94,27 +90,39 @@ class V10FormalPromotionTransactionTests(unittest.TestCase):
             release_surface_sha256=digest,
         )
         self.assertTrue(plan["promotion_plan_eligible"])
+        self.assertEqual(plan["package_baseline_version"], "1.0.0")
         self.assertEqual(plan["target_version"], "1.0.0")
         self.assertEqual(plan["target_tag"], "v1.0.0")
-        self.assertEqual(len(plan["metadata_mutations"]), 3)
+        self.assertEqual(len(plan["metadata_mutations"]), 1)
+        self.assertEqual(
+            plan["metadata_mutations"][0]["field"],
+            "project.classifiers.development_status",
+        )
         self.assertFalse(plan["automatic_metadata_mutation_allowed"])
         self.assertFalse(plan["automatic_tag_creation_allowed"])
         self.assertFalse(plan["automatic_publish_allowed"])
         self.assertTrue(plan["human_approval_required"])
 
-    def test_non_version_blocker_prevents_promotion_plan(self):
+    def test_non_version_blocker_prevents_stable_promotion_plan(self):
         digest = "c" * 64
         report = self._ready_report(digest)
         report["candidate_checks"]["independent_security_review_verified"] = False
-        report["blockers"] = [
-            "independent_security_review_verified",
-            "package_version_not_1_0_0",
-        ]
+        report["blockers"] = ["independent_security_review_verified"]
+        report["ready_for_human_promotion"] = False
         plan = build_formal_promotion_plan(report, "d" * 40, release_surface_sha256=digest)
         self.assertFalse(plan["promotion_plan_eligible"])
         self.assertEqual(plan["metadata_mutations"], [])
         self.assertIn("independent_security_review_verified", plan["blockers"])
-        self.assertIn("promotion_readiness_has_non_version_blockers", plan["blockers"])
+        self.assertIn("promotion_readiness_has_blockers", plan["blockers"])
+        self.assertIn("promotion_readiness_not_ready", plan["blockers"])
+
+    def test_package_baseline_mismatch_prevents_stable_promotion_plan(self):
+        digest = "1" * 64
+        report = self._ready_report(digest)
+        report["package_version"] = "0.5.0"
+        plan = build_formal_promotion_plan(report, "2" * 40, release_surface_sha256=digest)
+        self.assertFalse(plan["promotion_plan_eligible"])
+        self.assertIn("package_baseline_version_mismatch", plan["blockers"])
 
     def test_promotion_plan_rejects_different_release_surface_digest(self):
         with self.assertRaisesRegex(SystemExit, "different v1.0 release-surface digest"):
@@ -138,14 +146,18 @@ class V10FormalPromotionTransactionTests(unittest.TestCase):
         self.assertEqual(production["repository_digest_algorithm"], "sha256-release-surface-v1")
         self.assertIn("formal-promotion-transaction", governance["required_status_checks"])
 
-    def test_formal_release_state_and_package_remain_unpromoted(self):
+    def test_package_is_1_0_0_without_false_stable_claim(self):
         gate = json.loads((ROOT / "configs/release_candidate_gate.json").read_text(encoding="utf-8"))
         policy = load_policy()
         pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        package_init = (ROOT / "src/structurax/__init__.py").read_text(encoding="utf-8")
         self.assertFalse(gate["formal_release_eligible"])
-        self.assertEqual(policy["pre_promotion_version"], "0.5.0")
+        self.assertEqual(policy["package_baseline_version"], "1.0.0")
         self.assertEqual(policy["target_version"], "1.0.0")
-        self.assertIn('version = "0.5.0"', pyproject)
+        self.assertIn('version = "1.0.0"', pyproject)
+        self.assertIn('Development Status :: 3 - Alpha', pyproject)
+        self.assertIn('__version__ = "1.0.0"', package_init)
+        self.assertFalse(policy["production_readiness_claimed"])
 
 
 if __name__ == "__main__":
