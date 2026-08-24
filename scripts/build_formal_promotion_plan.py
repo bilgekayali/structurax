@@ -63,18 +63,21 @@ def build_formal_promotion_plan(
     failed_checks = sorted(name for name, passed in checks.items() if passed is not True)
 
     observed_version = readiness.get("package_version")
-    pre_version = active["pre_promotion_version"]
+    baseline_version = active["package_baseline_version"]
     target_version = active["target_version"]
     blockers = list(failed_checks)
-    if observed_version != pre_version:
-        blockers.append("pre_promotion_version_mismatch")
+    if baseline_version != target_version:
+        blockers.append("package_baseline_target_mismatch")
+    if observed_version != baseline_version:
+        blockers.append("package_baseline_version_mismatch")
 
-    readiness_blockers = set(readiness.get("blockers", []))
-    expected_readiness_blockers = {"package_version_not_1_0_0"}
-    if readiness_blockers != expected_readiness_blockers:
-        blockers.append("promotion_readiness_has_non_version_blockers")
-    if readiness.get("ready_for_human_promotion") is not False:
-        blockers.append("pre_promotion_readiness_must_remain_false_until_version_change")
+    readiness_blockers = readiness.get("blockers", [])
+    if not isinstance(readiness_blockers, list):
+        raise SystemExit("promotion readiness blockers must be a list")
+    if readiness_blockers:
+        blockers.append("promotion_readiness_has_blockers")
+    if readiness.get("ready_for_human_promotion") is not True:
+        blockers.append("promotion_readiness_not_ready")
 
     blockers = sorted(set(blockers))
     eligible = not blockers
@@ -83,6 +86,7 @@ def build_formal_promotion_plan(
         "release_surface_sha256": surface_digest,
         "expected_head_sha": expected_head_sha,
         "observed_version": observed_version,
+        "package_baseline_version": baseline_version,
         "target_version": target_version,
         "target_tag": active["target_tag"],
         "promotion_plan_eligible": eligible,

@@ -2,13 +2,15 @@
 
 [![CI](https://github.com/bilgekayali/structurax/actions/workflows/ci.yml/badge.svg)](https://github.com/bilgekayali/structurax/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.11--3.13-3776AB)
-![Status](https://img.shields.io/badge/status-v0.5%20construction%20intelligence-5B5BD6)
+![Status](https://img.shields.io/badge/status-v1.0.0%20package%20baseline-5B5BD6)
 [![License](https://img.shields.io/badge/code-Apache--2.0-green)](LICENSE)
 [![Data license](https://img.shields.io/badge/synthetic%20data-CC%20BY%204.0-orange)](DATA_LICENSE.md)
 
 StructuraX is an open-source foundation for trustworthy, AI-assisted construction-document workflows. It combines deterministic document controls, bounded AI evidence, human review governance and construction-commercial intelligence without granting autonomous payment, procurement or deployment authority.
 
-**v0.5** adds a strict construction-intelligence layer for BOQ reconciliation, contract and approved variation authority, three-way/four-way matching, supplier historical-median signals, project-cost variance evidence and typed document lineage.
+**1.0.0 package baseline:** package metadata is now `1.0.0`. This is not a formal production-readiness claim. Genuine independent security review, signed production-control evidence, repository-governance verification, final release SBOM/provenance attestation and human release approval remain required before `Production/Stable`, tagging or publication are treated as formally promoted.
+
+**v0.5** added a strict construction-intelligence layer for BOQ reconciliation, contract and approved variation authority, three-way/four-way matching, supplier historical-median signals, project-cost variance evidence and typed document lineage.
 
 > [!IMPORTANT]
 > Every committed document, model response, commercial record and review artifact is synthetic/reference-only. StructuraX performs no live OCR/model call, payment, ERP mutation, procurement commitment, deployment, external notification or autonomous approval. `matched`, `review` and `block` are evidence classifications for human review, not operational decisions.
@@ -171,7 +173,7 @@ CI runs on Python 3.11/3.12/3.13, verifies v0.2 signed fixtures, exercises v0.3 
 
 ## Scope and limitations
 
-StructuraX v0.5 does not authenticate real parties, validate legal digital signatures, perform live OCR or live LLM/provider calls, prove PDF malware absence, deploy infrastructure, prove production IAM/tenant isolation, approve/pay documents, issue purchase commitments, mutate ERP data or determine contractual/legal/engineering truth. Supplier anomalies are not proof of fraud or overcharging. Cost variance is not a legal determination of entitlement or liability. The project does not claim certification, production fitness, regulatory compliance or supervisory acceptance.
+StructuraX `1.0.0` package baseline does not authenticate real parties, validate legal digital signatures, perform live OCR or live LLM/provider calls, prove PDF malware absence, deploy infrastructure, prove production IAM/tenant isolation, approve/pay documents, issue purchase commitments, mutate ERP data or determine contractual/legal/engineering truth. Supplier anomalies are not proof of fraud or overcharging. Cost variance is not a legal determination of entitlement or liability. The project does not claim certification, production fitness, regulatory compliance or supervisory acceptance merely because the package version is `1.0.0`.
 
 See [Roadmap](docs/ROADMAP.md).
 
