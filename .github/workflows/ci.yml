@@ -37,7 +37,7 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Validate package version
-        run: python -c "import structurax; assert structurax.__version__ == '0.5.0'"
+        run: python -c "import structurax; assert structurax.__version__ == '1.0.0'"
 
       - name: Validate reference packs
         run: |
