@@ -93,8 +93,15 @@ repository-level CodeQL/release governance controls are actually enforced.
 An operational promotion handoff now converts the repository governance policy into the exact
 GitHub branch-protection REST payload, verifies a captured full protection response, and combines
 live governance, production evidence and independent-review state into one fail-closed promotion
-matrix. This does not enable branch protection or authorize gate mutation; an administrator must
-apply repository rules and the final promotion remains a separately reviewed change.
+matrix. The `main` branch is now publicly observed as protected after administrator ruleset
+configuration, but the authenticated full ruleset/protection snapshot still has to be captured and
+verified before repository governance is treated as fully closed.
+
+Independent-review handoff is now explicit for v1.0. The reviewer must cover the exact release
+security scope, bind the result to `sha256-release-surface-v1`, keep the detailed report outside the
+public repository, and supply a non-sensitive envelope whose report SHA-256 is recomputed during
+verification. Open critical, high, or release-blocking findings keep promotion fail-closed. This
+contract does not perform or fabricate the independent review.
 
 Formal promotion now has a two-phase transaction contract. External evidence is bound to a
 release-surface digest that normalizes only the explicitly allowlisted version/classifier metadata

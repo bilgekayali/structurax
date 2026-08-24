@@ -63,6 +63,7 @@ def _missing_protection_assessment() -> dict[str, Any]:
 
 def _independent_review_assessment(
     review_path: str | Path | None,
+    evidence_path: str | Path | None,
     repository_digest: str,
 ) -> dict[str, Any]:
     configured = Path(review_path or "security-review/v1.0-review.json")
@@ -71,19 +72,48 @@ def _independent_review_assessment(
     if not configured.is_file():
         return {
             "available": False,
+            "evidence_available": False,
             "verified": False,
             "independent_security_review_verified": False,
             "blockers": ["independent_security_review_missing"],
             "formal_release_gate_updated": False,
             "production_readiness_claimed": False,
         }
-    verified = verify_independent_review(configured, repository_digest)
+
+    if evidence_path is None:
+        return {
+            "available": True,
+            "evidence_available": False,
+            "verified": False,
+            "independent_security_review_verified": False,
+            "blockers": ["independent_security_review_evidence_missing"],
+            "formal_release_gate_updated": False,
+            "production_readiness_claimed": False,
+        }
+
+    verified = verify_independent_review(
+        configured,
+        repository_digest,
+        evidence_path=evidence_path,
+        required_schema_version="1.0.0",
+    )
     return {
         "available": True,
+        "evidence_available": True,
         "verified": verified["verified"] is True,
-        "independent_security_review_verified": verified["independent_security_review_verified"] is True,
+        "independent_security_review_verified": (
+            verified["independent_security_review_verified"] is True
+        ),
+        "schema_version": verified["schema_version"],
         "reviewer_id": verified["reviewer_id"],
+        "review_outcome": verified["review_outcome"],
+        "review_areas": verified["review_areas"],
+        "external_report_artifact_id": verified["external_report_artifact_id"],
         "review_evidence_sha256": verified["review_evidence_sha256"],
+        "review_evidence_verified": verified["review_evidence_verified"] is True,
+        "open_findings": verified["open_findings"],
+        "open_release_blocking_findings": verified["open_release_blocking_findings"],
+        "risk_acceptance_required": verified["risk_acceptance_required"],
         "blockers": [],
         "formal_release_gate_updated": False,
         "production_readiness_claimed": False,
@@ -99,6 +129,7 @@ def assess_promotion_readiness(
     production_evidence_path: str | Path | None = None,
     trusted_production_key_path: str | Path | None = None,
     independent_review_path: str | Path | None = None,
+    independent_review_evidence_path: str | Path | None = None,
     package_version: str | None = None,
     repository_digest: str | None = None,
 ) -> dict[str, Any]:
@@ -141,7 +172,11 @@ def assess_promotion_readiness(
     for check, passed in production_report["candidate_checks"].items():
         candidate_checks[check] = passed is True
 
-    review_report = _independent_review_assessment(independent_review_path, digest)
+    review_report = _independent_review_assessment(
+        independent_review_path,
+        independent_review_evidence_path,
+        digest,
+    )
     candidate_checks["independent_security_review_verified"] = (
         review_report["independent_security_review_verified"] is True
     )
@@ -149,6 +184,7 @@ def assess_promotion_readiness(
     required_version = active_policy["required_release_version"]
     observed_version = package_version or structurax.__version__
     blockers = sorted(name for name, passed in candidate_checks.items() if passed is not True)
+    blockers.extend(review_report.get("blockers", []))
     if observed_version != required_version:
         blockers.append("package_version_not_1_0_0")
     blockers = sorted(set(blockers))
@@ -193,6 +229,7 @@ def main() -> None:
     parser.add_argument("--production-evidence")
     parser.add_argument("--trusted-production-key")
     parser.add_argument("--independent-review")
+    parser.add_argument("--independent-review-evidence")
     parser.add_argument("--output")
     args = parser.parse_args()
 
@@ -211,6 +248,7 @@ def main() -> None:
         production_evidence_path=args.production_evidence,
         trusted_production_key_path=args.trusted_production_key,
         independent_review_path=args.independent_review,
+        independent_review_evidence_path=args.independent_review_evidence,
     )
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:

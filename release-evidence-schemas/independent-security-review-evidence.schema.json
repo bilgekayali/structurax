@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://structurax.local/release-evidence/independent-security-review-evidence.schema.json",
+  "title": "StructuraX Independent Security Review Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "release_surface_sha256",
+    "reviewer_id",
+    "reviewer_independence_confirmed",
+    "review_outcome",
+    "review_areas",
+    "external_report_artifact_id",
+    "review_evidence_sha256",
+    "open_findings",
+    "open_release_blocking_findings",
+    "risk_acceptance_required",
+    "completed_at",
+    "raw_secret_material_present",
+    "production_readiness_claimed"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "release_surface_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "reviewer_id": {"type": "string", "minLength": 3, "maxLength": 160},
+    "reviewer_independence_confirmed": {"const": true},
+    "review_outcome": {"const": "passed"},
+    "review_areas": {"const": ["application_trust_boundaries", "cryptography_and_evidence_integrity", "dependency_and_supply_chain", "deployment_and_observability", "identity_and_authorization", "ingestion_and_untrusted_content", "release_governance", "tenant_isolation", "workflow_authority_and_audit"]},
+    "external_report_artifact_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,159}$"},
+    "review_evidence_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "open_findings": {"type": "object", "additionalProperties": false, "required": ["critical", "high", "medium", "low", "informational"], "properties": {"critical": {"const": 0}, "high": {"const": 0}, "medium": {"type": "integer", "minimum": 0}, "low": {"type": "integer", "minimum": 0}, "informational": {"type": "integer", "minimum": 0}}},
+    "open_release_blocking_findings": {"const": 0},
+    "risk_acceptance_required": {"const": false},
+    "completed_at": {"type": "string", "format": "date-time"},
+    "raw_secret_material_present": {"const": false},
+    "production_readiness_claimed": {"const": false}
+  }
+}
