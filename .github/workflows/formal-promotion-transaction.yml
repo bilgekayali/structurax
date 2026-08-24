@@ -45,12 +45,12 @@ jobs:
             --output /tmp/structurax-formal-promotion-plan.json
           cat /tmp/structurax-formal-promotion-plan.json
 
-      - name: Enforce pre-release fail-closed semantics
+      - name: Enforce non-mutating promotion semantics
         run: |
-          grep -q '"promotion_plan_eligible": false' /tmp/structurax-formal-promotion-plan.json
           grep -q '"automatic_metadata_mutation_allowed": false' /tmp/structurax-formal-promotion-plan.json
           grep -q '"automatic_tag_creation_allowed": false' /tmp/structurax-formal-promotion-plan.json
           grep -q '"automatic_publish_allowed": false' /tmp/structurax-formal-promotion-plan.json
+          grep -q '"formal_gate_mutation_authorized": false' /tmp/structurax-formal-promotion-plan.json
           grep -q '"production_readiness_claimed": false' /tmp/structurax-formal-promotion-plan.json
 
       - name: Run formal promotion transaction tests
