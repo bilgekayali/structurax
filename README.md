@@ -15,6 +15,16 @@ StructuraX is an open-source foundation for trustworthy, AI-assisted constructio
 > [!IMPORTANT]
 > Every committed document, model response, commercial record and review artifact is synthetic/reference-only. StructuraX performs no live OCR/model call, payment, ERP mutation, procurement commitment, deployment, external notification or autonomous approval. `matched`, `review` and `block` are evidence classifications for human review, not operational decisions.
 
+## Executive overview — 30 seconds
+
+**Problem:** Construction-document workflows need traceable reconciliation, anomaly triage and controlled human decisions across contracts, orders and invoices.
+
+**Reference solution:** A synthetic-data workflow for deterministic document controls, bounded AI evidence, provenance and approval governance.
+
+**Inspect the work:** [Source code](src/) · [Automated tests](tests/) · [Technical documentation](docs/).
+
+**Status and limits:** v1.0.0 **package baseline**, not a formal production-ready release, live document-processing service, independent security assessment or autonomous procurement system.
+
 ## Trust flow
 
 ```mermaid
